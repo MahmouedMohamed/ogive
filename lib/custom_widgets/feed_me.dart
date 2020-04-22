@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget FeedMe(BuildContext context, double opacity) {
+Widget FeedMeWidget(BuildContext context, double opacity) {
   return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -19,8 +19,7 @@ Widget FeedMe(BuildContext context, double opacity) {
         Colors.white
       ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
       child: GestureDetector(
-        onTap: (){
-//          Navigator.pop(context);
+        onTap: () {
           Navigator.pushNamed(context, 'FeedMeIntro');
         },
         child: Column(
@@ -39,9 +38,7 @@ Widget FeedMe(BuildContext context, double opacity) {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(
-//                          top: MediaQuery.of(context).size.height / 5,
-                  bottom: 20),
+              padding: EdgeInsets.only(bottom: 20),
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
