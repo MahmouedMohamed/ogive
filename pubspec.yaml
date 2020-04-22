@@ -28,6 +28,10 @@ dependencies:
   flutter_slidable: ^0.5.4
   liquid_swipe: ^1.4.2
   http: ^0.12.0+4
+  stats: ^1.0.0
+  flutter_local_notifications: ^1.4.1
+  gradient_text: ^1.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
