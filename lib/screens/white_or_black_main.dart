@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ogive/api_callers/get.dart';
 import 'package:ogive/ml_models/weather_model.dart';
@@ -40,8 +41,12 @@ class _WhiteOrBlackState extends State<WhiteOrBlack> {
           );
         } else {
           return Container(
+            color: Colors.black,
             alignment: Alignment.center,
-            child: Text('Loading'),
+            child: CupertinoActivityIndicator(
+              animating: true,
+              radius: 50,
+            ),
           );
         }
       },
