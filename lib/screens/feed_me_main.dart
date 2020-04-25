@@ -1,12 +1,14 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ogive/api_callers/delete.dart';
 import 'package:ogive/api_callers/get.dart';
 import 'package:ogive/models/user_location.dart';
+import 'package:toast/toast.dart';
 import 'dart:math';
-import 'package:vector_math/vector_math.dart';
+import 'package:vector_math/vector_math.dart' as math;
 
 class FeedMe extends StatefulWidget {
   @override
@@ -19,15 +21,12 @@ class _FeedMeState extends State<FeedMe> {
   List<Marker> markers;
   bool following = false;
   Marker chosedMarker;
+  bool acquired = false;
   @override
   void initState() {
     super.initState();
     userLocation = new UserLocation();
   }
-
-//  initMarkers() async {
-//    markers = await getMarkers();
-//  }
 
   changeColor(index) {
     print('Finding Changing color of ${markers[index].markerId}');
@@ -42,10 +41,13 @@ class _FeedMeState extends State<FeedMe> {
     double lat2 = EndP.latitude;
     double lon1 = StartP.longitude;
     double lon2 = EndP.longitude;
-    double dLat = radians(lat2 - lat1);
-    double dLon = radians(lon2 - lon1);
+    double dLat = math.radians(lat2 - lat1);
+    double dLon = math.radians(lon2 - lon1);
     double a = sin(dLat / 2) * sin(dLat / 2) +
-        cos(radians(lat1)) * cos(radians(lat2)) * sin(dLon / 2) * sin(dLon / 2);
+        cos(math.radians(lat1)) *
+            cos(math.radians(lat2)) *
+            sin(dLon / 2) *
+            sin(dLon / 2);
     double c = 2 * asin(sqrt(a));
     return Radius * c;
   }
@@ -82,10 +84,9 @@ class _FeedMeState extends State<FeedMe> {
     );
     Widget cancelButton = FlatButton(
       child: Text("Cancel"),
-      onPressed: () async{
+      onPressed: () async {
         await deleteMarker(markers[index].markerId.value);
-        setState(()  {
-        });
+        setState(() {});
         Navigator.of(context).pop();
       },
     );
@@ -108,6 +109,7 @@ class _FeedMeState extends State<FeedMe> {
       },
     );
   }
+
   Future<GoogleMap> getGoogleMap() async {
     Completer<GoogleMapController> _controller = Completer();
     if (userLocation.getLatLng() == null) {
@@ -154,12 +156,95 @@ class _FeedMeState extends State<FeedMe> {
         } else {
           return Container(
             alignment: Alignment.center,
+            child: CupertinoActionSheet(
+              title: Text('Loading'),
+              actions: [
+                CupertinoActivityIndicator(
+                  radius: 50,
+                )
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget getAcquiringWidget() {
+    return FutureBuilder<Widget>(
+      future: thanksMessage(),
+      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.data != null) {
+          return snapshot.data;
+        } else if (snapshot.error != null) {
+          return Container(
+            alignment: Alignment.center,
+            child: Text('Error ${snapshot.error}'),
+          );
+        } else {
+          return Container(
+            alignment: Alignment.center,
             child: Text('Loading'),
           );
         }
       },
     );
   }
+
+  Future<Widget> thanksMessage() async {
+    print('thing here');
+    if (userLocation.getLatLng() == null) {
+      print('thing awaiting userLocation');
+      await userLocation.getUserLocation();
+    }
+    while (CalculationByDistance(
+                userLocation.getLatLng(), markers.elementAt(0).position) *
+            1000 >
+        10) {
+      print(
+          'thing Calling it ${CalculationByDistance(userLocation.getLatLng(), markers.elementAt(0).position) * 1000}');
+      await userLocation.getUserLocation();
+    }
+    return AlertDialog(
+      title: Text("Did you got it?"),
+      content: Text(
+          'it seems that you are ${num.parse((CalculationByDistance(userLocation.getLatLng(), markers[0].position) * 1000).toStringAsFixed(2))} Meter away from.'),
+      actions: [
+        FlatButton(
+            child: Text("Yes i got it!"),
+            onPressed: () {
+              setState(() async {
+                Toast.show(
+                    'Thank You for making the world a better place!', context,
+                    duration: 7, backgroundColor: Colors.green);
+                await deleteMarker(markers[0].markerId.value);
+                following = !following;
+                Navigator.popAndPushNamed(context, 'FeedMe');
+              });
+            }),
+        FlatButton(
+          child: Text(
+            "it's not found!",
+            style: TextStyle(color: Colors.red),
+          ),
+          onPressed: () {
+            setState(() async {
+              Toast.show(
+                  'Sorry for wasting your time, but consider that it has gone to its place, Thank you!',
+                  context,
+                  duration: 7,
+                  backgroundColor: Colors.green);
+              await deleteMarker(markers[0].markerId.value);
+              following = !following;
+              Navigator.popAndPushNamed(context, 'FeedMe');
+            });
+          },
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -169,20 +254,26 @@ class _FeedMeState extends State<FeedMe> {
             Container(
               child: showGoogleMap(),
             ),
-            Visibility(
-                visible: following,
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: RaisedButton(
-                    onPressed: () {
-                      setState(() {
-                        following = !following;
-                        markers.clear();
-                      });
-                    },
-                    child: Text('Cancel'),
-                  ),
-                ))
+            following
+                ? Align(
+                    alignment: Alignment.topRight,
+                    child: RaisedButton(
+                      onPressed: () {
+                        setState(() {
+                          following = !following;
+                          markers.clear();
+                        });
+                      },
+                      child: Text('Cancel'),
+                    ),
+                  )
+                : Container(),
+            following
+                ? Align(
+                    alignment: Alignment.center,
+                    child: getAcquiringWidget(),
+                  )
+                : Container(),
           ],
         ));
   }
