@@ -5,16 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:ogive/custom_widgets/marker_icon.dart';
+import 'package:ogive/models/user.dart';
 import 'package:ogive/models/weather.dart';
 
-final String URL = 'http://192.168.1.102:8000/api/Markers';
+final String URL = 'http://192.168.1.103:8000/api/';
 
 Future<List<Marker>> getMarkers() async {
   List data;
   MarkerIcon markerOption = new MarkerIcon();
   List<Marker> markers = new List<Marker>();
   var response = await http
-      .get(Uri.encodeFull(URL), headers: {"Accpet": "application/json"});
+      .get(Uri.encodeFull(URL+'Markers'), headers: {"Accpet": "application/json"});
   var convertDataToJson = jsonDecode(response.body);
   data = convertDataToJson['markers'];
   for (int i = 0; i < data.length; i++) {
@@ -55,4 +56,50 @@ Future<Weather> getWeatherCondition(latitude,longitude) async{
     double.parse(convertDataToJson['wind']['speed'].toString()),
   );
   return weather;
+}
+Future<Map<String,dynamic>> getUser(email,password) async {
+  var data;
+//  print('thing login NOWW $email, $password}');
+  var body = {'email': email, 'password': password};
+  var response = await http
+      .post(Uri.encodeFull(URL+'login'), headers: {"Accpet": "application/json"},body: body);
+//  print('thing login NOWWWWW');
+  int responseStatus = response.statusCode;
+  if(response.statusCode != 200){
+    return null;
+  }
+  else{
+    var convertDataToJson = jsonDecode(response.body);
+//    print('thing login $convertDataToJson');
+//    print('thing ${convertDataToJson['user']['email_verified_at'] == null}');
+    User user = new User(
+      convertDataToJson['user']['id'].toString(),
+      convertDataToJson['user']['name'],
+      convertDataToJson['user']['user_name'],
+      convertDataToJson['user']['email'],
+      convertDataToJson['user']['email_verified_at'] == null ? null : DateTime.parse(convertDataToJson['user']['email_verified_at']),
+      DateTime.parse(convertDataToJson['user']['created_at']),
+      DateTime.parse(convertDataToJson['user']['updated_at']),
+    );
+    Map<String,dynamic> map = {"oauthToken": convertDataToJson['token'],"user" : user};
+//    data = convertDataToJson['token'];
+//    print('thing responseStatus ${convertDataToJson['user']['id']}');
+//    DateTime(year)
+//    print('thing DateTime ${DateTime.parse(convertDataToJson['user']['created_at'])}');
+    print('thing  $map');
+    return map;
+  }
+//  for (int i = 0; i < data.length; i++) {
+//    MarkerId markerId = new MarkerId(data[i]['id'].toString());
+//    double latitude = double.parse(data[i]['Latitude'].toString());
+//    double longitude = double.parse(data[i]['Longitude'].toString());
+//    markers.add(Marker(
+//      markerId: markerId,
+//      position: LatLng(latitude, longitude),
+//      icon: markerOption.getIcon(),
+//      infoWindow:
+//      InfoWindow(title: markerId.toString(), snippet: markerId.toString()),
+//    ));
+//  }
+//  return markers;
 }
