@@ -31,6 +31,7 @@ dependencies:
   stats: ^1.0.0
   flutter_local_notifications: ^1.4.1
   gradient_text: ^1.0.2
+  shared_preferences: ^0.5.7
 
 dev_dependencies:
   flutter_test:
