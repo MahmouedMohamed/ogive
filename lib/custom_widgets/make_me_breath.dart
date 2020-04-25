@@ -29,7 +29,7 @@ Widget MakeMeBreathWidget(BuildContext context, double opacity) {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height / 10, bottom: 20),
+                  top: 10, bottom: 20),
               child: Align(
                 alignment: Alignment.center,
                 child: Image.asset(
@@ -40,7 +40,7 @@ Widget MakeMeBreathWidget(BuildContext context, double opacity) {
             ),
             Padding(
               padding: EdgeInsets.only(
-                  bottom: 20),
+                  bottom: 10),
               child: Align(
                 alignment: Alignment.center,
                 child: RichText(
@@ -59,10 +59,10 @@ Widget MakeMeBreathWidget(BuildContext context, double opacity) {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 20),
+              padding: EdgeInsets.only(top: 10),
               child: Image.asset(
                 'assets/images/tree.png',
-                fit: BoxFit.fill,
+                fit: BoxFit.fitHeight,
               ),
             ),
           ],

@@ -29,7 +29,7 @@ Widget FindMeJobWidget(BuildContext context, double opacity) {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height / 10, bottom: 20),
+                      top: 10, bottom: 20),
                   child: Align(
                     alignment: Alignment.center,
                     child: Image.asset(
@@ -45,7 +45,7 @@ Widget FindMeJobWidget(BuildContext context, double opacity) {
                     alignment: Alignment.center,
                     child: RichText(
                       textAlign: TextAlign.center,
-                      text: TextSpan(text: 'Find \n Me \n A Job',
+                      text: TextSpan(text: 'Find  Me \n A Job',
                         style: TextStyle(
                             fontSize: 50,
                             fontWeight: FontWeight.w900,
@@ -59,7 +59,7 @@ Widget FindMeJobWidget(BuildContext context, double opacity) {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.only(top: 10),
                   child: Image.asset(
                     'assets/images/job.png',
                     fit: BoxFit.fill,

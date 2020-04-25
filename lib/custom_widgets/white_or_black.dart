@@ -22,7 +22,7 @@ Widget WhiteOrBlackWidget(BuildContext context, double opacity) {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height / 10, bottom: 20),
+                  top: 10, bottom: 20),
               child: Align(
                 alignment: Alignment.center,
                 child: Image.asset(
