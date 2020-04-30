@@ -4,24 +4,27 @@ import 'package:ogive/models/user.dart';
 import 'package:toast/toast.dart';
 
 import '../session_manager.dart';
-
+import '../auth.dart';
 class LoginScreen extends StatelessWidget {
   static final TextEditingController _email = new TextEditingController();
   static final TextEditingController _password = new TextEditingController();
   String get email => _email.text;
   String get password => _password.text;
   BuildContext context;
+  Auth auth = new Auth();
   Future<dynamic> onSubmit() async {
-    Map<String,dynamic> map =await getUser(email,password);
-    print('thing MAAAAP $map');
-
-    if(map == null){
+    var user =await auth.signIn(email, password);
+    print('thing user = $user');
+    if(user == null){
       Toast.show('Email Or Password are inCorrect!',context);
+    }
+    else if(user.runtimeType == String){
+      Toast.show('$user !',context);
     }
     else{
       SessionManager sessionManager = new SessionManager();
       print('thing ${sessionManager.sharedPreferences}');
-      sessionManager.createSession(map.values.toList().elementAt(1), map.values.toList().elementAt(0));
+      sessionManager.createSession(user);
       Navigator.popAndPushNamed(context, 'Home');
     }
   }
@@ -165,39 +168,30 @@ class LoginScreen extends StatelessWidget {
                               ),
                             )
                           ]),
+                      Text(
+                        'Don\'t have Account? ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, "Signup");
+                        },
+                        child: Text(
+                          'Join Us Now!',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.greenAccent,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.only(bottom: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                'Don\'t have Account? ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              Text(
-                                'Join Us Now!',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.greenAccent,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ))
-                    ],
-                  ),
-                )
               ],
             ),
           ),
