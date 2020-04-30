@@ -4,7 +4,6 @@ import 'models/user.dart';
 class SessionManager {
   SharedPreferences sharedPreferences;
   User user;
-  String oauthToken;
   SessionManager._privateConstructor();
 
   static final SessionManager _instance = SessionManager._privateConstructor();
@@ -22,19 +21,13 @@ class SessionManager {
       userData[0],
       userData[1],
       userData[2],
-      userData[3],
-      userData[4] == 'null' ? null : DateTime.parse(userData[4]),
-      DateTime.parse(userData[5]),
-      DateTime.parse(userData[6]),
+      DateTime.parse(userData[3]),
     );
-    oauthToken = sharedPreferences.getString('oauthToken');
   }
 
-  createSession(User user, String oauthToken) {
+  createSession(User user) {
     this.user = user;
-    this.oauthToken = oauthToken;
     sharedPreferences.setStringList('user', user.toList());
-    sharedPreferences.setString('oauthToken', oauthToken);
   }
 
   bool isLoggin() {
@@ -47,9 +40,5 @@ class SessionManager {
 
   logout() {
     sharedPreferences.clear();
-  }
-
-  String getOauthToken() {
-    return oauthToken;
   }
 }
