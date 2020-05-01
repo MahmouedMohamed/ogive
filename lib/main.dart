@@ -1,6 +1,3 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ogive/screens/feed_me_main.dart';
@@ -13,7 +10,6 @@ import 'screens/splash_screen.dart';
 import 'screens/stay_in_touch_page.dart';
 import 'screens/white_or_black_main.dart';
 import 'session_manager.dart';
-import 'auth.dart';
 
 void main() {
   runApp(Ogive());
@@ -23,11 +19,8 @@ class Ogive extends StatefulWidget {
   @override
   _OgiveState createState() => _OgiveState();
 }
-
 class _OgiveState extends State<Ogive> {
   SessionManager sessionManager;
-  FirebaseUser user;
-  Auth auth = new Auth();
   @override
   initState() {
     super.initState();
@@ -40,8 +33,7 @@ class _OgiveState extends State<Ogive> {
     setState(() {});
   }
 
-  Widget getHomePage() {
-    getSession();
+  getHomePage() {
     if (sessionManager.isLoggin()) {
       sessionManager.loadSession();
       return HomePage();
@@ -51,7 +43,6 @@ class _OgiveState extends State<Ogive> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAnalytics analytics = FirebaseAnalytics();
     return MaterialApp(
       title: 'Ogive',
       theme: ThemeData(
@@ -66,9 +57,6 @@ class _OgiveState extends State<Ogive> {
               ),
             )
           : getHomePage(),
-      navigatorObservers: [
-        FirebaseAnalyticsObserver(analytics: analytics),
-      ],
 //      home: SplashScreen(),
       routes: <String, WidgetBuilder>{
         "SplashScreen": (BuildContext context) => SplashScreen(),

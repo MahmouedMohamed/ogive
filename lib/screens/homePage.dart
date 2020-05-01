@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -16,7 +15,6 @@ import 'package:ogive/custom_widgets/white_or_black.dart';
 import '../session_manager.dart';
 import 'report_a_problem_page.dart';
 import 'stay_in_touch_page.dart';
-import '../auth.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -26,8 +24,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   SessionManager sessionManager;
-//  AnimationController _controller;
-  Auth auth = new Auth();
+  AnimationController _controller;
+//  Animation _animation;
   double opacity = 1.0;
   int _selectedIndex = 1;
   int currentPage = 0;
@@ -43,6 +41,8 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     sessionManager = new SessionManager();
+    print('thing User is ${sessionManager.getUser().toList()}');
+
     changeOpacity();
 //    _controller = AnimationController(vsync: this,duration: Duration(seconds: 2),reverseDuration: Duration(seconds: 2));
 //    _animation = Tween(begin: 0.0,end: 1.0).animate(_controller);
@@ -184,7 +184,7 @@ class _HomePageState extends State<HomePage>
             backgroundColor: appBarColorSelector(currentPage),
             centerTitle: true,
             title: Text(
-              'Welcome, ${sessionManager.getUser().getName()} !',
+              'Welcome, ${sessionManager.getUser().user_name} !',
             ),
             leading: Container(
               decoration: BoxDecoration(
@@ -200,11 +200,11 @@ class _HomePageState extends State<HomePage>
                     icon: Icon(Icons.exit_to_app),
                     onPressed: () {
                       sessionManager.logout();
-                      auth.signOut();
                       Navigator.of(context).popAndPushNamed('Login');
                     },
                   )),
             ],
+//        primary: false,
           )),
       bottomNavigationBar: BottomNavigationBar(
         items: [
