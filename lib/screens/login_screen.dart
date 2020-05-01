@@ -185,12 +185,17 @@ class LoginScreen extends StatelessWidget {
                                   fontSize: 12,
                                 ),
                               ),
-                              Text(
-                                'Join Us Now!',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.greenAccent,
-                                  fontSize: 15,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, "Signup");
+                                },
+                                child: Text(
+                                  'Join Us Now!',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.greenAccent,
+                                    fontSize: 15,
+                                  ),
                                 ),
                               ),
                             ],

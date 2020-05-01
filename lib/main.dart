@@ -1,13 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ogive/screens/feed_me_main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
 import 'screens/feed_me_intro.dart';
 import 'screens/homePage.dart';
 import 'screens/login_screen.dart';
+import 'screens/report_a_problem_page.dart';
+import 'screens/signup_screen.dart';
+import 'screens/splash_screen.dart';
+import 'screens/stay_in_touch_page.dart';
 import 'screens/white_or_black_main.dart';
 import 'session_manager.dart';
 
@@ -19,10 +19,8 @@ class Ogive extends StatefulWidget {
   @override
   _OgiveState createState() => _OgiveState();
 }
-
 class _OgiveState extends State<Ogive> {
   SessionManager sessionManager;
-  bool isLogin;
   @override
   initState() {
     super.initState();
@@ -46,7 +44,7 @@ class _OgiveState extends State<Ogive> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Ogive',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -59,9 +57,14 @@ class _OgiveState extends State<Ogive> {
               ),
             )
           : getHomePage(),
+//      home: SplashScreen(),
       routes: <String, WidgetBuilder>{
+        "SplashScreen": (BuildContext context) => SplashScreen(),
         "Login": (BuildContext context) => LoginScreen(),
+        "Signup": (BuildContext context) => SignupScreen(),
         "Home": (BuildContext context) => HomePage(),
+//        "ReportProblem": (BuildContext context) => ReportProblemPage(),
+        "StayInTouch": (BuildContext context) => StayInTouchPage(),
         "FeedMeIntro": (BuildContext context) => FeedMeIntro(),
         "FeedMe": (BuildContext context) => FeedMe(),
         "WhiteOrBlack": (BuildContext context) => WhiteOrBlack(),
