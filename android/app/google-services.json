@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "745774929824",
+    "firebase_url": "https://ogive-23.firebaseio.com",
+    "project_id": "ogive-23",
+    "storage_bucket": "ogive-23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:745774929824:android:1d81f00c88f296a557f6c5",
+        "android_client_info": {
+          "package_name": "com.ogive.ogive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "745774929824-hdnjv8unecg9plv368a7g3irpv1qhepf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCR_aFqmJMJyM8h95wzJfi1BjsCzb9hngo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "745774929824-hdnjv8unecg9plv368a7g3irpv1qhepf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "745774929824-siuruei4noune1vod7k9d4radotlddib.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ogive.ogive"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
