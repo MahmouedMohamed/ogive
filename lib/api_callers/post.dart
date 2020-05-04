@@ -10,9 +10,7 @@ Future<Map<String,dynamic>> register(fullName,userName,email,password) async {
   }
   else{
     var convertDataToJson = jsonDecode(response.body);
-//    print('thing $convertDataToJson');
     String nameError,userNameError,emailError,passwordError;
-//    print('thing ${convertDataToJson['details'].length}');
     if(convertDataToJson['status']=='undone'){
       for(int i=0;i<convertDataToJson['details'].length;i++){
         if(convertDataToJson['details'][i].toString().contains('The name'))
@@ -24,7 +22,6 @@ Future<Map<String,dynamic>> register(fullName,userName,email,password) async {
         else if(convertDataToJson['details'][i].toString().contains('password'))
           passwordError=convertDataToJson['details'][i];
       }
-//      print('thing $nameError \n $userNameError \n $emailError \n $passwordError');
       List<String> error = [nameError,userNameError,emailError,passwordError];
       return {
         "status": convertDataToJson['status'],
@@ -35,17 +32,25 @@ Future<Map<String,dynamic>> register(fullName,userName,email,password) async {
         "status": convertDataToJson['status'],
       };
     }
-//    User user = new User(
-//      convertDataToJson['user']['id'].toString(),
-//      convertDataToJson['user']['name'],
-//      convertDataToJson['user']['user_name'],
-//      convertDataToJson['user']['email'],
-//      convertDataToJson['user']['email_verified_at'] == null ? null : DateTime.parse(convertDataToJson['user']['email_verified_at']),
-//      DateTime.parse(convertDataToJson['user']['created_at']),
-//      DateTime.parse(convertDataToJson['user']['updated_at']),
-//    );
-//    Map<String,dynamic> map = {"oauthToken": convertDataToJson['token'],"user" : user};
-//    print('thing  $map');
-//    return map;
   }
+}
+Future<Map<String,dynamic>> createMarker(latitude,longitude,userId,status) async {
+  var body = {'Latitude': latitude.toString(), 'Longitude': longitude.toString(),'user_id': userId, 'status': status.toString()};
+  var response = await http
+      .post(Uri.encodeFull(URL+'Marker'), headers: {"Accpet": "application/json"},body: body).catchError((e){
+        print(e);
+  });
+  var convertDataToJson = jsonDecode(response.body);
+  if(response.statusCode != 200){
+    print(convertDataToJson);
+    return {
+      "status": convertDataToJson['status'],
+    };
+  }
+  else{
+    print(convertDataToJson);
+      return {
+        "status": convertDataToJson['status'],
+      };
+    }
 }

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:ogive/custom_widgets/marker_icon.dart';
@@ -42,14 +41,16 @@ Future<Weather> getWeatherCondition(latitude,longitude) async{
       .get(Uri.encodeFull(weatherURL), headers: headers);
   var convertDataToJson = jsonDecode(response.body);
   weather = new Weather(
+    convertDataToJson['name'].toString(),
     latitude,
     longitude,
     convertDataToJson['weather'][0]['main'].toString().toLowerCase(),
+    convertDataToJson['weather'][0]['description'],
     double.parse(convertDataToJson['main']['temp'].toString())-273.15,
     double.parse(convertDataToJson['main']['temp_min'].toString())-273.15,
     double.parse(convertDataToJson['main']['temp_max'].toString())-273.15,
     double.parse(convertDataToJson['main']['pressure'].toString()),
-    double.parse(convertDataToJson['main']['humidity'].toString())/100,
+    double.parse(convertDataToJson['main']['humidity'].toString()),
     double.parse(convertDataToJson['wind']['speed'].toString()),
   );
   return weather;
