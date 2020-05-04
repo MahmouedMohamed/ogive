@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:stats/stats.dart';
 import 'dart:math' as math;
-
+import 'package:path_provider/path_provider.dart';
 class Model {
   List<String> _days = [
     'D1',
@@ -116,7 +118,45 @@ class Model {
     'yes',
     'no'
   ]; //wear white?
-  test(outlook, temperature, humidity, wind) {
+  _read() async {
+    List<String> fileNames = ['outlook','temperature','humidity','windSpeed','decision'];
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      for(int i=0;i<fileNames.length;i++){
+        final file = File('${directory.path}/${fileNames.elementAt(i)}.txt');
+        String text = await file.readAsString();
+        List<String> _list = text.split(' ');
+        _list.removeLast();
+        print('thing $_list');
+        switch(i){
+          case 0:
+            _list.forEach((element) {_outlook.add(element);});
+            print('thing $_outlook');
+            break;
+          case 1:
+            _list.forEach((element) {_doubleTemperature.add(double.parse(element));});
+            print('thing $_doubleTemperature');
+            break;
+          case 2:
+            _list.forEach((element) {_doubleHumidity.add(double.parse(element));});
+            print('thing $_doubleHumidity');
+            break;
+          case 3:
+            _list.forEach((element) {_doubleWind.add(double.parse(element));});
+            print('thing $_doubleWind');
+            break;
+          case 4:
+            _list.forEach((element) {_decision.add(element);});
+            print('thing $_decision');
+            break;
+        }
+      }
+    } catch (e) {
+      print("thing Couldn't read file");
+    }
+  }
+  test(outlook, temperature, humidity, wind) async {
+    await _read();
     List<List<double>> decisionYes = new List<List<double>>();
     List<List<double>> decisionNo = new List<List<double>>();
     List<List<double>> list = [
@@ -181,9 +221,9 @@ class Model {
     print('thing resultYes ${resultYes}');
     print('thing resultNo ${resultNo}');
     if(resultYes > resultNo)
-      return 'You can Wear White';
+      return 'yes';
     else
-      return 'You can Wear Black';
+      return 'no';
   }
 
   getProbability(list, testValue) {
