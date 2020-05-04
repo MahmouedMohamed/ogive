@@ -1,19 +1,15 @@
-
 import 'dart:core';
 
-class User{
+class User {
   String ID;
   String name;
   String user_name;
   String email;
-//  String password;
   DateTime email_verified_at;
   DateTime created_at;
   DateTime updated_at;
-//  public String hashPassword(String password) {
-//    return String.valueOf(password.hashCode());
-//  }
-  User(this.ID, this.name, this.user_name, this.email, this.email_verified_at,this.created_at, this.updated_at);
+  User(this.ID, this.name, this.user_name, this.email, this.email_verified_at,
+      this.created_at, this.updated_at);
 
   setID(ID) {
     this.ID = ID;
@@ -27,10 +23,6 @@ class User{
     this.name = name;
   }
 
-  setPassword(password) {
-//    this.password = hashPassword(password);
-  }
-
   getID() {
     return ID;
   }
@@ -42,15 +34,6 @@ class User{
   getName() {
     return name;
   }
-
-//  getpassword() {
-//    return password ;
-//  }
-
-
-//  getPassword() {
-//    return password;
-//  }
 
   getUser_name() {
     return user_name;
