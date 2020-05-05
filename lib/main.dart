@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ogive/screens/feed_me_main.dart';
+import 'custom_widgets/user_decision.dart';
 import 'screens/feed_me_intro.dart';
 import 'screens/homePage.dart';
 import 'screens/login_screen.dart';
@@ -68,6 +69,7 @@ class _OgiveState extends State<Ogive> {
         "FeedMeIntro": (BuildContext context) => FeedMeIntro(),
         "FeedMe": (BuildContext context) => FeedMe(),
         "WhiteOrBlack": (BuildContext context) => WhiteOrBlack(),
+        "UserDecision": (BuildContext context) => UserDecision(),
         //add more routes here
       },
     );
