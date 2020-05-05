@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:ogive/custom_widgets/breed_me.dart';
@@ -15,6 +16,7 @@ import 'package:ogive/custom_widgets/white_or_black.dart';
 import '../session_manager.dart';
 import 'report_a_problem_page.dart';
 import 'stay_in_touch_page.dart';
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =  FlutterLocalNotificationsPlugin();
 
 class HomePage extends StatefulWidget {
   @override
@@ -42,7 +44,7 @@ class _HomePageState extends State<HomePage>
     super.initState();
     sessionManager = new SessionManager();
     print('thing User is ${sessionManager.getUser().toList()}');
-
+    initializeNotification();
     changeOpacity();
 //    _controller = AnimationController(vsync: this,duration: Duration(seconds: 2),reverseDuration: Duration(seconds: 2));
 //    _animation = Tween(begin: 0.0,end: 1.0).animate(_controller);
@@ -172,15 +174,37 @@ class _HomePageState extends State<HomePage>
         break;
     }
   }
+  initializeNotification()async{
+    var initializationSettingsAndroid =
+    AndroidInitializationSettings('launch_background');
+    var initializationSettingsIOS = IOSInitializationSettings(
+      requestSoundPermission: false,
+      requestBadgePermission: false,
+      requestAlertPermission: false,
+      onDidReceiveLocalNotification: (id, title, body, payload) {
 
+      },
+    );
+    var initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: (payload) {
+        if(payload == 'W|B'){
+          return Navigator.popAndPushNamed(context, 'UserDecision');
+        }
+        return null;
+        }, );
+  }
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+//    SystemChrome.setEnabledSystemUIOverlays([]);
 //    _controller.forward();
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(40),
           child: AppBar(
+            primary: true,
+
             backgroundColor: appBarColorSelector(currentPage),
             centerTitle: true,
             title: Text(
@@ -204,7 +228,7 @@ class _HomePageState extends State<HomePage>
                     },
                   )),
             ],
-//        primary: false,
+//        primary: true,
           )),
       bottomNavigationBar: BottomNavigationBar(
         items: [
