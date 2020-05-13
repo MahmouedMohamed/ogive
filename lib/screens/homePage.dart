@@ -11,12 +11,15 @@ import 'package:ogive/custom_widgets/help_me.dart';
 import 'package:ogive/custom_widgets/make_me_breath.dart';
 import 'package:ogive/custom_widgets/paint_for_me.dart';
 import 'package:ogive/custom_widgets/pay_for_me.dart';
+import 'package:ogive/custom_widgets/user_decision.dart';
 import 'package:ogive/custom_widgets/white_or_black.dart';
 
 import '../session_manager.dart';
 import 'report_a_problem_page.dart';
 import 'stay_in_touch_page.dart';
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =  FlutterLocalNotificationsPlugin();
+
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 class HomePage extends StatefulWidget {
   @override
@@ -174,27 +177,28 @@ class _HomePageState extends State<HomePage>
         break;
     }
   }
-  initializeNotification()async{
+
+  initializeNotification() async {
     var initializationSettingsAndroid =
-    AndroidInitializationSettings('launch_background');
+        AndroidInitializationSettings('launch_background');
     var initializationSettingsIOS = IOSInitializationSettings(
       requestSoundPermission: false,
       requestBadgePermission: false,
       requestAlertPermission: false,
-      onDidReceiveLocalNotification: (id, title, body, payload) {
-
-      },
+      onDidReceiveLocalNotification: (id, title, body, payload) {},
     );
     var initializationSettings = InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
       onSelectNotification: (payload) {
         if(payload == 'W|B'){
           return Navigator.popAndPushNamed(context, 'UserDecision');
         }
         return null;
-        }, );
+      }, );
   }
+
   @override
   Widget build(BuildContext context) {
 //    SystemChrome.setEnabledSystemUIOverlays([]);
@@ -203,12 +207,10 @@ class _HomePageState extends State<HomePage>
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(40),
           child: AppBar(
-            primary: true,
-
             backgroundColor: appBarColorSelector(currentPage),
-            centerTitle: true,
             title: Text(
               'Welcome, ${sessionManager.getUser().user_name} !',
+              overflow: TextOverflow.visible,
             ),
             leading: Container(
               decoration: BoxDecoration(
@@ -218,15 +220,23 @@ class _HomePageState extends State<HomePage>
                   size: 30, color: iconsColorSelector(currentPage)),
             ),
             actions: [
-              Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: IconButton(
-                    icon: Icon(Icons.exit_to_app),
-                    onPressed: () {
-                      sessionManager.logout();
-                      Navigator.of(context).popAndPushNamed('Login');
-                    },
-                  )),
+              IconButton(
+                icon: Icon(Icons.settings_applications),
+                onPressed: () {
+                  Navigator.pushNamed(context, 'UserDecision');
+                },
+              ),
+//              Padding(
+//                  padding: EdgeInsets.only(right: 10),
+//                  child:
+              IconButton(
+                icon: Icon(Icons.exit_to_app),
+                onPressed: () {
+                  sessionManager.logout();
+                  Navigator.of(context).popAndPushNamed('Login');
+                },
+              )
+//    ),
             ],
 //        primary: true,
           )),

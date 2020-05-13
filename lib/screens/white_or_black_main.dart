@@ -54,10 +54,18 @@ class _WhiteOrBlackState extends State<WhiteOrBlack> {
             snapshot.data != null) {
           if(sessionManager.weatherInfoExist()){
             sessionManager.clearWeatherInfo();
+            print('thing hhh${snapshot.data}');
             sessionManager.createWeatherInfo(snapshot.data);
+            _scheduleNotification();
+          }
+          else{
+            print('thing hhh${snapshot.data}');
+            sessionManager.createWeatherInfo(snapshot.data);
+            _scheduleNotification();
           }
           return getBody(snapshot.data);
         } else if (snapshot.error != null) {
+          sessionManager.clearWeatherInfo();
           return Container(
             alignment: Alignment.center,
             child: Text('${snapshot.error}'),
@@ -105,11 +113,6 @@ class _WhiteOrBlackState extends State<WhiteOrBlack> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([]);
-    if(sessionManager.weatherInfoExist()){
-      flutterLocalNotificationsPlugin.cancelAll();
-      sessionManager.clearWeatherInfo();
-    }
-    _scheduleNotification();
     return showResult();
   }
 

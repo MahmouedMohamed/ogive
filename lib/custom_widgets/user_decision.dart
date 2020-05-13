@@ -19,10 +19,13 @@ class _UserDecisionState extends State<UserDecision> {
   void initState() {
     super.initState();
     loadSessionManager();
+    info = sessionManager.loadWeatherInfo();
     setState(() {});
   }
   loadSessionManager()async{
     await sessionManager.getSessionManager();
+    info = await sessionManager.loadWeatherInfo();
+    setState(() {});
   }
   _save(outlook,temperature,humidity,windSpeed,decision) async {
     Map<String,dynamic> map = {'outlook' : outlook,'temperature' : temperature,'humidity' : humidity,'windSpeed' : windSpeed,'decision': decision};
@@ -33,12 +36,18 @@ class _UserDecisionState extends State<UserDecision> {
       print('thing done writing ${map.values.elementAt(i)} to ${file.path}');
     }
     sessionManager.clearWeatherInfo();
-    SystemNavigator.pop();
+    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
   @override
   Widget build(BuildContext context) {
-    sessionManager.weatherInfoExist()? info = sessionManager.loadWeatherInfo(): Navigator.popAndPushNamed(context, 'Home');
-    return sessionManager.sharedPreferences == null
+//    sessionManager.weatherInfoExist()? info = sessionManager.loadWeatherInfo():
+//    null;
+//    Navigator.popAndPushNamed(context, 'Home');
+  print('thing ${info[0]}');
+  setState(() {});
+  info = sessionManager.loadWeatherInfo();
+  setState(() {});
+    return info == null
         ? Container(
       color: Colors.lightBlue,
       child: CupertinoActivityIndicator(

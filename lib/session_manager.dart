@@ -48,6 +48,7 @@ class SessionManager {
     print('thing HERE');
   }
   loadWeatherInfo(){
+    print('thing hh ${sharedPreferences.getString('decision')}');
     return[
       sharedPreferences.getString('decision'),
       sharedPreferences.getString('condition'),
