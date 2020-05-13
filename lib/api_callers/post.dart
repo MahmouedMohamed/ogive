@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-final String URL = 'http://192.168.1.103:8000/api/';
+final String URL = 'http://192.168.1.104:8000/api/';
 Future<Map<String,dynamic>> register(fullName,userName,email,password) async {
   var body = {'name': fullName, 'user_name': userName,'email': email, 'password': password};
   var response = await http
@@ -34,17 +34,25 @@ Future<Map<String,dynamic>> register(fullName,userName,email,password) async {
     }
   }
 }
-Future<Map<String,dynamic>> createMarker(latitude,longitude,userId,status) async {
-  var body = {'Latitude': latitude.toString(), 'Longitude': longitude.toString(),'user_id': userId, 'status': status.toString()};
+Future<Map<String,dynamic>> createMarker(latitude,longitude,userId,name,description,quantity,priority) async {
+  var body = {
+    'Latitude': latitude.toString(),
+    'Longitude': longitude.toString(),
+    'user_id': userId,
+    'name': name,
+    'description' : description,
+    'quantity' : quantity.toString(),
+    'priority' : priority.toString(),
+  };
   var response = await http
-      .post(Uri.encodeFull(URL+'Marker'), headers: {"Accpet": "application/json"},body: body).catchError((e){
-        print(e);
-  });
+      .post(Uri.encodeFull(URL+'Marker'), headers: {"Accpet": "application/json"},body: body);
+  print('thing ${response.body}');
   var convertDataToJson = jsonDecode(response.body);
   if(response.statusCode != 200){
     print(convertDataToJson);
     return {
       "status": convertDataToJson['status'],
+      "details" : convertDataToJson['details'],
     };
   }
   else{
