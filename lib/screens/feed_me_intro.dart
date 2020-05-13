@@ -14,15 +14,7 @@ class FeedMeIntro extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           RaisedButton(onPressed: () async {
-            UserLocation userLocation= new UserLocation();
-            SessionManager sessionManager =  new SessionManager();
-            if(userLocation.getLatLng()==null)
-              await userLocation.getUserLocation();
-            Map<String,dynamic> map = await createMarker(userLocation.getLatLng().latitude,userLocation.getLatLng().longitude,sessionManager.getUser().getID(),1);
-            Toast.show(
-              '${map.values.elementAt(0)}',
-              context
-            );
+            Navigator.pushNamed(context, 'MarkerCreation');
           },
             child: Text('add Marker'),
           ),
