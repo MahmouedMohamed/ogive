@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ogive/api_callers/get.dart';
-import 'package:ogive/models/user.dart';
 import 'package:toast/toast.dart';
 
 import '../session_manager.dart';
@@ -12,19 +11,18 @@ class LoginScreen extends StatelessWidget {
   String get password => _password.text;
   BuildContext context;
   Future<dynamic> onSubmit() async {
-    Map<String,dynamic> map =await getUser(email,password);
-    print('thing MAAAAP $map');
-
-    if(map == null){
-      Toast.show('Email Or Password are inCorrect!',context);
-    }
-    else{
+    Map<String, dynamic> map = await getUser(email, password);
+    if (map == null) {
+      Toast.show('Email Or Password are inCorrect!', context);
+    } else {
       SessionManager sessionManager = new SessionManager();
       print('thing ${sessionManager.sharedPreferences}');
-      sessionManager.createSession(map.values.toList().elementAt(1), map.values.toList().elementAt(0));
+      sessionManager.createSession(
+          map.values.toList().elementAt(1), map.values.toList().elementAt(0));
       Navigator.popAndPushNamed(context, 'Home');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     this.context = context;
@@ -50,7 +48,8 @@ class LoginScreen extends StatelessWidget {
                       width: 200,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage('assets/images/ogive_version_2.png'),
+                          image:
+                              AssetImage('assets/images/ogive_version_2.png'),
                         ),
                       ),
                     )),
@@ -60,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(top: 0.0, bottom: 40),
                       child: Text(
-                        'Fe Sektak',
+                        'OGIVE',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white30,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:ogive/custom_widgets/breed_me.dart';
@@ -10,11 +11,15 @@ import 'package:ogive/custom_widgets/help_me.dart';
 import 'package:ogive/custom_widgets/make_me_breath.dart';
 import 'package:ogive/custom_widgets/paint_for_me.dart';
 import 'package:ogive/custom_widgets/pay_for_me.dart';
+import 'package:ogive/custom_widgets/user_decision.dart';
 import 'package:ogive/custom_widgets/white_or_black.dart';
 
 import '../session_manager.dart';
 import 'report_a_problem_page.dart';
 import 'stay_in_touch_page.dart';
+
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 class HomePage extends StatefulWidget {
   @override
@@ -42,7 +47,7 @@ class _HomePageState extends State<HomePage>
     super.initState();
     sessionManager = new SessionManager();
     print('thing User is ${sessionManager.getUser().toList()}');
-
+    initializeNotification();
     changeOpacity();
 //    _controller = AnimationController(vsync: this,duration: Duration(seconds: 2),reverseDuration: Duration(seconds: 2));
 //    _animation = Tween(begin: 0.0,end: 1.0).animate(_controller);
@@ -173,18 +178,39 @@ class _HomePageState extends State<HomePage>
     }
   }
 
+  initializeNotification() async {
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('launch_background');
+    var initializationSettingsIOS = IOSInitializationSettings(
+      requestSoundPermission: false,
+      requestBadgePermission: false,
+      requestAlertPermission: false,
+      onDidReceiveLocalNotification: (id, title, body, payload) {},
+    );
+    var initializationSettings = InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onSelectNotification: (payload) {
+        if(payload == 'W|B'){
+          return Navigator.popAndPushNamed(context, 'UserDecision');
+        }
+        return null;
+      }, );
+  }
+
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+//    SystemChrome.setEnabledSystemUIOverlays([]);
 //    _controller.forward();
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(40),
           child: AppBar(
             backgroundColor: appBarColorSelector(currentPage),
-            centerTitle: true,
             title: Text(
               'Welcome, ${sessionManager.getUser().user_name} !',
+              overflow: TextOverflow.visible,
             ),
             leading: Container(
               decoration: BoxDecoration(
@@ -194,17 +220,25 @@ class _HomePageState extends State<HomePage>
                   size: 30, color: iconsColorSelector(currentPage)),
             ),
             actions: [
-              Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: IconButton(
-                    icon: Icon(Icons.exit_to_app),
-                    onPressed: () {
-                      sessionManager.logout();
-                      Navigator.of(context).popAndPushNamed('Login');
-                    },
-                  )),
+              IconButton(
+                icon: Icon(Icons.settings_applications),
+                onPressed: () {
+                  Navigator.pushNamed(context, 'UserDecision');
+                },
+              ),
+//              Padding(
+//                  padding: EdgeInsets.only(right: 10),
+//                  child:
+              IconButton(
+                icon: Icon(Icons.exit_to_app),
+                onPressed: () {
+                  sessionManager.logout();
+                  Navigator.of(context).popAndPushNamed('Login');
+                },
+              )
+//    ),
             ],
-//        primary: false,
+//        primary: true,
           )),
       bottomNavigationBar: BottomNavigationBar(
         items: [

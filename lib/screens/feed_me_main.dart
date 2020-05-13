@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ogive/api_callers/delete.dart';
 import 'package:ogive/api_callers/get.dart';
+import 'package:ogive/api_callers/put.dart';
 import 'package:ogive/models/user_location.dart';
 import 'package:toast/toast.dart';
 import 'dart:math';
@@ -26,13 +27,6 @@ class _FeedMeState extends State<FeedMe> {
   void initState() {
     super.initState();
     userLocation = new UserLocation();
-  }
-
-  changeColor(index) {
-    print('Finding Changing color of ${markers[index].markerId}');
-    markers[index] = markers[index].copyWith(
-        iconParam:
-            BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen));
   }
 
   double CalculationByDistance(LatLng StartP, LatLng EndP) {
@@ -93,9 +87,11 @@ class _FeedMeState extends State<FeedMe> {
     // set up the AlertDialog
     print('LatLng ${userLocation.getLatLng()} , ${markers[index].position}');
     AlertDialog alert = AlertDialog(
-      title: Text("${markers[index].markerId}"),
-      content: Text(
-          '${(CalculationByDistance(userLocation.getLatLng(), markers[index].position) * 1000).toString()}'),
+      title: Text("${markers[index].infoWindow.title}"),
+      content: Text('${(CalculationByDistance(userLocation.getLatLng(), markers[index].position) * 1000).toStringAsFixed(2)} meter to get it'
+        +'\n${markers[index].infoWindow.snippet}'
+        ,
+      ),
       actions: [
         launchButton,
         cancelButton,

@@ -36,7 +36,34 @@ class SessionManager {
     sharedPreferences.setStringList('user', user.toList());
     sharedPreferences.setString('oauthToken', oauthToken);
   }
-
+  bool weatherInfoExist(){
+    return sharedPreferences.containsKey('decision');
+  }
+  createWeatherInfo(Map<String, dynamic> data){
+    sharedPreferences.setString('decision', data.values.elementAt(0));
+    sharedPreferences.setString('condition', data.values.elementAt(1).condition.toString());
+    sharedPreferences.setString('temperature', data.values.elementAt(1).temperature.toString());
+    sharedPreferences.setString('humidity', data.values.elementAt(1).humidity.toString());
+    sharedPreferences.setString('windSpeed', data.values.elementAt(1).windSpeed.toString());
+    print('thing HERE');
+  }
+  loadWeatherInfo(){
+    print('thing hh ${sharedPreferences.getString('decision')}');
+    return[
+      sharedPreferences.getString('decision'),
+      sharedPreferences.getString('condition'),
+      sharedPreferences.getString('temperature'),
+      sharedPreferences.getString('humidity'),
+      sharedPreferences.getString('windSpeed'),
+    ];
+  }
+  clearWeatherInfo(){
+    sharedPreferences.remove('decision');
+    sharedPreferences.remove('condition');
+    sharedPreferences.remove('temperature');
+    sharedPreferences.remove('humidity');
+    sharedPreferences.remove('windSpeed');
+  }
   bool isLoggin() {
     return (sharedPreferences.containsKey("user"));
   }
