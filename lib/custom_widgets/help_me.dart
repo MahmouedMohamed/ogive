@@ -34,7 +34,7 @@ Widget HelpMeWidget(BuildContext context, double opacity) {
                     alignment: Alignment.center,
                     child: Image.asset(
                       'assets/images/ogive_version_2.png',
-                      scale: MediaQuery.of(context).size.height / 50,
+                      height: MediaQuery.of(context).size.height/6,
                     ),
                   ),
                 ),

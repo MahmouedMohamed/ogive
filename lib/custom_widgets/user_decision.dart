@@ -19,11 +19,12 @@ class _UserDecisionState extends State<UserDecision> {
   void initState() {
     super.initState();
     loadSessionManager();
-    info = sessionManager.loadWeatherInfo();
-    setState(() {});
+    loadWeatherInfo();
   }
   loadSessionManager()async{
     await sessionManager.getSessionManager();
+  }
+  loadWeatherInfo() async {
     info = await sessionManager.loadWeatherInfo();
     setState(() {});
   }
@@ -40,13 +41,7 @@ class _UserDecisionState extends State<UserDecision> {
   }
   @override
   Widget build(BuildContext context) {
-//    sessionManager.weatherInfoExist()? info = sessionManager.loadWeatherInfo():
-//    null;
-//    Navigator.popAndPushNamed(context, 'Home');
-  print('thing ${info[0]}');
-  setState(() {});
   info = sessionManager.loadWeatherInfo();
-  setState(() {});
     return info == null
         ? Container(
       color: Colors.lightBlue,

@@ -34,7 +34,7 @@ Widget MakeMeBreathWidget(BuildContext context, double opacity) {
                 alignment: Alignment.center,
                 child: Image.asset(
                   'assets/images/ogive_version_2.png',
-                  scale: MediaQuery.of(context).size.height / 50,
+                  height: MediaQuery.of(context).size.height/6,
                 ),
               ),
             ),
@@ -62,7 +62,7 @@ Widget MakeMeBreathWidget(BuildContext context, double opacity) {
               padding: EdgeInsets.only(top: 10),
               child: Image.asset(
                 'assets/images/tree.png',
-                fit: BoxFit.fitHeight,
+                height: MediaQuery.of(context).size.height/5,
               ),
             ),
           ],
