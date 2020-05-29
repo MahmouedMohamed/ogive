@@ -11,7 +11,10 @@ import 'screens/signup_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/stay_in_touch_page.dart';
 import 'screens/white_or_black_main.dart';
-
+import 'screens/profile_page.dart';
+import 'screens/memory_wall.dart';
+import 'screens/memory_wall_memory_creation.dart';
+import 'screens/bot.dart';
 void main() {
   runApp(Ogive());
 }
@@ -40,13 +43,17 @@ class _OgiveState extends State<Ogive> {
         "Login": (BuildContext context) => LoginScreen(),
         "Signup": (BuildContext context) => SignupScreen(),
         "Home": (BuildContext context) => HomePage(),
+        "Profile": (BuildContext context) => ProfilePage(),
 //        "ReportProblem": (BuildContext context) => ReportProblemPage(),
         "StayInTouch": (BuildContext context) => StayInTouchPage(),
         "FeedMeIntro": (BuildContext context) => FeedMeIntro(),
         "FeedMe": (BuildContext context) => FeedMe(),
         "MarkerCreation" : (BuildContext context) => MarkerCreation(),
+        "MemoryCreation" : (BuildContext context) => MemoryCreation(),
         "WhiteOrBlack": (BuildContext context) => WhiteOrBlack(),
         "UserDecision": (BuildContext context) => UserDecision(),
+        "MemoryWall": (BuildContext context) => MemoryWall(),
+        "Bot" : (BuildContext context) => Bot(),
         //add more routes here
       },
     );

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:ogive/custom_widgets/breed_me.dart';
 import 'package:ogive/custom_widgets/chat_with_me.dart';
@@ -11,12 +9,10 @@ import 'package:ogive/custom_widgets/help_me.dart';
 import 'package:ogive/custom_widgets/make_me_breath.dart';
 import 'package:ogive/custom_widgets/paint_for_me.dart';
 import 'package:ogive/custom_widgets/pay_for_me.dart';
-import 'package:ogive/custom_widgets/user_decision.dart';
 import 'package:ogive/custom_widgets/white_or_black.dart';
-
+import 'package:ogive/custom_widgets/memory_wall.dart';
+import 'package:ogive/custom_widgets/foodometer.dart';
 import '../session_manager.dart';
-import 'report_a_problem_page.dart';
-import 'stay_in_touch_page.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -82,35 +78,45 @@ class _HomePageState extends State<HomePage>
         break;
       case 2:
         {
-          return Colors.green;
+          return Colors.black;
         }
         break;
       case 3:
         {
-          return Colors.yellow;
+          return Colors.amber;
         }
         break;
       case 4:
         {
-          return Colors.orange;
+          return Colors.green;
         }
         break;
       case 5:
         {
-          return Colors.pink;
+          return Colors.yellow;
         }
         break;
       case 6:
         {
-          return Colors.black;
+          return Colors.orange;
         }
         break;
       case 7:
         {
-          return Colors.teal;
+          return Colors.pink;
         }
         break;
       case 8:
+        {
+          return Colors.black;
+        }
+        break;
+      case 9:
+        {
+          return Colors.teal;
+        }
+        break;
+      case 10:
         {
           return Colors.blue;
         }
@@ -137,35 +143,45 @@ class _HomePageState extends State<HomePage>
         break;
       case 2:
         {
-          return Colors.green[900];
+          return Colors.white;
         }
         break;
       case 3:
         {
-          return Colors.yellow[900];
+          return Colors.red[900];
         }
         break;
       case 4:
         {
-          return Colors.orange[900];
+          return Colors.green[900];
         }
         break;
       case 5:
         {
-          return Colors.pink[900];
+          return Colors.yellow[900];
         }
         break;
       case 6:
         {
-          return Colors.white;
+          return Colors.orange[900];
         }
         break;
       case 7:
         {
-          return Colors.teal[900];
+          return Colors.pink[900];
         }
         break;
       case 8:
+        {
+          return Colors.white;
+        }
+        break;
+      case 9:
+        {
+          return Colors.teal[900];
+        }
+        break;
+      case 10:
         {
           return Colors.blue[900];
         }
@@ -204,6 +220,14 @@ class _HomePageState extends State<HomePage>
 //    SystemChrome.setEnabledSystemUIOverlays([]);
 //    _controller.forward();
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        Navigator.pushNamed(context, "Bot");
+      },
+        child: Icon(Icons.message,color: iconsColorSelector(currentPage),size: 30,),
+      backgroundColor: appBarColorSelector(currentPage),
+        heroTag: "bot",
+        tooltip: 'Bot',
+      ),
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(40),
           child: AppBar(
@@ -216,8 +240,12 @@ class _HomePageState extends State<HomePage>
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
-              child: Icon(Icons.person,
+              child: IconButton(icon: Icon(Icons.person,
                   size: 30, color: iconsColorSelector(currentPage)),
+                onPressed: () {
+                  Navigator.pushNamed(context, "Profile");
+                },
+              )
             ),
             actions: [
               IconButton(
@@ -269,13 +297,15 @@ class _HomePageState extends State<HomePage>
           fullTransitionValue: 800,
           enableSlideIcon: true,
           waveType: WaveType.liquidReveal,
-          positionSlideIcon: 0.8,
+          positionSlideIcon: 0.0,
           onPageChangeCallback: (activePageIndex) {
             currentPage = activePageIndex;
           },
           pages: <Container>[
             FeedMeWidget(context, opacity),
             WhiteOrBlackWidget(context, opacity),
+            MemoryWallWidget(context,opacity),
+            Foodometer(context,opacity),
             MakeMeBreathWidget(context, opacity),
             BreedMeWidget(context, opacity),
             PayForMeWidget(context, opacity),

@@ -13,22 +13,38 @@ import 'package:ogive/models/user_location.dart';
 import 'package:ogive/models/weather.dart';
 import '../session_manager.dart';
 import 'homePage.dart';
-
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:path_provider/path_provider.dart';
 class WhiteOrBlack extends StatefulWidget {
 
   @override
   _WhiteOrBlackState createState() => _WhiteOrBlackState();
 }
-
+enum TtsState { playing, stopped }
 class _WhiteOrBlackState extends State<WhiteOrBlack> {
   Weather weather;
   UserLocation userLocation;
   SessionManager sessionManager = new SessionManager();
+  FlutterTts flutterTts;
   @override
   void initState() {
     super.initState();
     userLocation = new UserLocation();
+    initTts();
+  }
+  initTts() {
+    flutterTts = FlutterTts();
+  }
+  Future _speak(_newVoiceText) async {
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setVolume(1.0);
+    await flutterTts.setSpeechRate(0.65);
+    await flutterTts.setPitch(1.1);
+    if (_newVoiceText != null) {
+      if (_newVoiceText.isNotEmpty) {
+        await flutterTts.speak(_newVoiceText);
+      }
+    }
   }
 
   Future<Map<String, dynamic>> get() async {
@@ -120,6 +136,7 @@ class _WhiteOrBlackState extends State<WhiteOrBlack> {
     List<dynamic> decoration = getDecoration(
         data.values.elementAt(1).condition
         );
+    _speak('Hey today temperature is '+data.values.elementAt(1).temperature.toString()+' So '+data.values.elementAt(0).toString());
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -342,5 +359,11 @@ class _WhiteOrBlackState extends State<WhiteOrBlack> {
       default:
         return ['sunny', Icons.wb_sunny, Colors.orange, Colors.black];
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    flutterTts.stop();
   }
 }
