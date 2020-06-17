@@ -5,6 +5,7 @@ class SessionManager {
   SharedPreferences sharedPreferences;
   User user;
   String oauthToken;
+  DateTime sessionExpire;
   SessionManager._privateConstructor();
 
   static final SessionManager _instance = SessionManager._privateConstructor();
@@ -17,6 +18,10 @@ class SessionManager {
   }
 
   loadSession() {
+    sessionExpire = DateTime.parse(sharedPreferences.getString('sessionExpire'));
+    if(sessionExpire.isBefore(DateTime.now())){
+      logout();
+    }
     List<String> userData = sharedPreferences.getStringList('user');
     user = new User(
       userData[0],
@@ -34,6 +39,7 @@ class SessionManager {
     this.user = user;
     this.oauthToken = oauthToken;
     sharedPreferences.setStringList('user', user.toList());
+    sharedPreferences.setString('sessionExpire', DateTime.now().add(Duration(days: 30)).toString());
     sharedPreferences.setString('oauthToken', oauthToken);
   }
   bool weatherInfoExist(){

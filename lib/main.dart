@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ogive/screens/feed_me_main.dart';
+import 'package:ogive/test.dart';
 import 'custom_widgets/user_decision.dart';
 import 'screens/feed_me_intro.dart';
 import 'screens/feed_me_marker_creation.dart';
@@ -31,6 +33,7 @@ class _OgiveState extends State<Ogive> {
 
   @override
   Widget build(BuildContext context) {
+//    SystemChrome.setEnabledSystemUIOverlays([]);
     return MaterialApp(
       title: 'Ogive',
       theme: ThemeData(
@@ -54,6 +57,7 @@ class _OgiveState extends State<Ogive> {
         "UserDecision": (BuildContext context) => UserDecision(),
         "MemoryWall": (BuildContext context) => MemoryWall(),
         "Bot" : (BuildContext context) => Bot(),
+        "Test" : (BuildContext context) => Test(),
         //add more routes here
       },
     );
