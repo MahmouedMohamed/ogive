@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:ogive/custom_widgets/marker_icon.dart';
@@ -7,18 +8,21 @@ import 'package:ogive/models/like.dart';
 import 'package:ogive/models/memory.dart';
 import 'package:ogive/models/user.dart';
 import 'package:ogive/models/weather.dart';
-
+import 'package:dio/dio.dart';
 final String URL = 'http://192.168.1.100:8000/api/';
-Future<List<Marker>> getMarkers() async {
+Future<List<Marker>> getMarkers(String oauthToken) async {
   List markers;
-  List properties;
+//  List properties;
   MarkerIcon markerOption = new MarkerIcon();
   List<Marker> returnedMarkers = new List<Marker>();
-  var response = await http.get(Uri.encodeFull(URL + 'Markers'),
-      headers: {"Accpet": "application/json"});
+  var response = await http.get(Uri.encodeFull(URL + 'markers'),
+      headers: {"Accpet": "application/json","Authorization": "Bearer "+oauthToken});
+  print('thing ${response.body}');
   var convertDataToJson = jsonDecode(response.body);
+  print('thing $convertDataToJson');
   markers = convertDataToJson['markers'];
-  properties = convertDataToJson['properties'];
+  print('thing $markers');
+//  properties = convertDataToJson['properties'];
   for (int i = 0; i < markers.length; i++) {
     MarkerId markerId = new MarkerId(markers[i]['id'].toString());
     double latitude = double.parse(markers[i]['Latitude'].toString());
@@ -27,11 +31,11 @@ Future<List<Marker>> getMarkers() async {
       markerId: markerId,
       position: LatLng(latitude, longitude),
 //      icon: markerOption.getIcon(),
-      icon: getMarkerColor(properties[i]['priority']),
+      icon: getMarkerColor(markers[i]['food']['priority']),
       infoWindow: InfoWindow(
-          title: properties[i]['name'],
-          snippet: properties[i]['description'] +
-              ' \nQuantity = ${properties[i]['quantity']}'),
+          title: markers[i]['food']['name'],
+          snippet: markers[i]['food']['description'] +
+              ' \nQuantity = ${markers[i]['food']['quantity']}'),
     ));
   }
   return returnedMarkers;
@@ -107,12 +111,13 @@ Future<Map<String, dynamic>> getUser(email, password) async {
   }
 }
 
-Future<List<Memory>> getMemories() async {
+Future<List<Memory>> getMemories(String oauthToken) async {
   List returnedMemories = new List<Memory>();
-  var response = await http.get(Uri.encodeFull(URL + 'Memories'),
-      headers: {"Accpet": "application/json"});
+  var response = await http.get(Uri.encodeFull(URL + 'memories'),
+      headers: {"Accpet": "application/json","Authorization": "Bearer "+oauthToken});
   var convertDataToJson = jsonDecode(response.body);
   List memories = convertDataToJson['memories'];
+  print('thing $memories');
   for (int i = 0; i < memories.length; i++) {
     List returnedLikes = new List<Like>();
     if(memories[i]['likes']!=null){
@@ -137,4 +142,31 @@ Future<List<Memory>> getMemories() async {
     );
   }
   return returnedMemories;
+}
+Future<Map<String,dynamic>> getJob() async {
+  var response = await http.get(Uri.encodeFull('https://remotive.io/api/remote-jobs?limit=100'),
+      headers: {"Accpet": "application/json"});
+  var convertDataToJson = jsonDecode(response.body);
+//  print('thing ${convertDataToJson['jobs'].length}');
+  return convertDataToJson;
+}
+Future<String> getQuote() async {
+  var response = await http.get(Uri.encodeFull('https://api.fisenko.net/quotes?l=en'),
+      headers: {"Accpet": "application/json"});
+  var convertDataToJson = jsonDecode(response.body);
+  print('thing ${convertDataToJson['text']}');
+  return convertDataToJson['text'];
+}
+Future<Map<String,dynamic>> getNews(query,pageNumber) async {
+  var response = await http.get(Uri.encodeFull('http://content.guardianapis.com/world/$query?api-key=7bd910b5-889e-4446-904d-dae19d3890bc&page=$pageNumber'),
+      headers: {"Accpet": "application/json"});
+  var convertDataToJson = jsonDecode(response.body);
+  return convertDataToJson;
+}
+Future<String> getSpaceNews() async {
+  var response = await http.get(Uri.encodeFull('https://api.spacexdata.com/v3/launches/latest'),
+      headers: {"Accpet": "application/json"});
+  var convertDataToJson = jsonDecode(response.body);
+  print('thing ${convertDataToJson}');
+//  return convertDataToJson['text'];
 }

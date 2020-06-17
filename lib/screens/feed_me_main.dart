@@ -11,6 +11,8 @@ import 'package:toast/toast.dart';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart' as math;
 
+import '../session_manager.dart';
+
 class FeedMe extends StatefulWidget {
   @override
   _FeedMeState createState() => _FeedMeState();
@@ -23,6 +25,7 @@ class _FeedMeState extends State<FeedMe> {
   bool following = false;
   Marker chosedMarker;
   bool acquired = false;
+  SessionManager sessionManager = new SessionManager();
   @override
   void initState() {
     super.initState();
@@ -79,7 +82,7 @@ class _FeedMeState extends State<FeedMe> {
     Widget cancelButton = FlatButton(
       child: Text("Cancel"),
       onPressed: () async {
-        await deleteMarker(markers[index].markerId.value);
+        await deleteMarker(sessionManager.oauthToken,markers[index].markerId.value);
         setState(() {});
         Navigator.of(context).pop();
       },
@@ -112,7 +115,7 @@ class _FeedMeState extends State<FeedMe> {
       await userLocation.getUserLocation();
     }
 
-    following ? 1 : markers = await getMarkers();
+    following ? 1 : markers = await getMarkers(sessionManager.oauthToken);
     print('markers ${markers.length}');
     for (int i = 0; i < markers.length; i++) {
       markers[i] = markers.elementAt(i).copyWith(onTapParam: () {
@@ -214,7 +217,7 @@ class _FeedMeState extends State<FeedMe> {
                 Toast.show(
                     'Thank You for making the world a better place!', context,
                     duration: 7, backgroundColor: Colors.green);
-                await deleteMarker(markers[0].markerId.value);
+                await deleteMarker(sessionManager.oauthToken,markers[0].markerId.value);
                 following = !following;
                 Navigator.popAndPushNamed(context, 'FeedMe');
               });
@@ -231,7 +234,7 @@ class _FeedMeState extends State<FeedMe> {
                   context,
                   duration: 7,
                   backgroundColor: Colors.green);
-              await deleteMarker(markers[0].markerId.value);
+              await deleteMarker(sessionManager.oauthToken,markers[0].markerId.value);
               following = !following;
               Navigator.popAndPushNamed(context, 'FeedMe');
             });

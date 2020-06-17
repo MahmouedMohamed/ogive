@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:ogive/custom_widgets/breed_me.dart';
@@ -12,6 +13,7 @@ import 'package:ogive/custom_widgets/pay_for_me.dart';
 import 'package:ogive/custom_widgets/white_or_black.dart';
 import 'package:ogive/custom_widgets/memory_wall.dart';
 import 'package:ogive/custom_widgets/foodometer.dart';
+import 'package:ogive/custom_widgets/under_construction.dart';
 import '../session_manager.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -43,6 +45,7 @@ class _HomePageState extends State<HomePage>
     super.initState();
     sessionManager = new SessionManager();
     print('thing User is ${sessionManager.getUser().toList()}');
+    print('thing Expire date is ${sessionManager.sessionExpire}');
     initializeNotification();
     changeOpacity();
 //    _controller = AnimationController(vsync: this,duration: Duration(seconds: 2),reverseDuration: Duration(seconds: 2));
@@ -208,114 +211,106 @@ class _HomePageState extends State<HomePage>
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onSelectNotification: (payload) {
-        if(payload == 'W|B'){
+        if (payload == 'W|B') {
           return Navigator.popAndPushNamed(context, 'UserDecision');
         }
         return null;
-      }, );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-//    SystemChrome.setEnabledSystemUIOverlays([]);
 //    _controller.forward();
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.pushNamed(context, "Bot");
-      },
-        child: Icon(Icons.message,color: iconsColorSelector(currentPage),size: 30,),
-      backgroundColor: appBarColorSelector(currentPage),
-        heroTag: "bot",
-        tooltip: 'Bot',
-      ),
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40),
-          child: AppBar(
-            backgroundColor: appBarColorSelector(currentPage),
-            title: Text(
-              'Welcome, ${sessionManager.getUser().user_name} !',
-              overflow: TextOverflow.visible,
-            ),
-            leading: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              child: IconButton(icon: Icon(Icons.person,
-                  size: 30, color: iconsColorSelector(currentPage)),
-                onPressed: () {
-                  Navigator.pushNamed(context, "Profile");
-                },
-              )
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.settings_applications),
-                onPressed: () {
-                  Navigator.pushNamed(context, 'UserDecision');
-                },
-              ),
-//              Padding(
-//                  padding: EdgeInsets.only(right: 10),
-//                  child:
-              IconButton(
-                icon: Icon(Icons.exit_to_app),
-                onPressed: () {
-                  sessionManager.logout();
-                  Navigator.of(context).popAndPushNamed('Login');
-                },
-              )
-//    ),
-            ],
-//        primary: true,
-          )),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.people), title: Text('Stay in touch')),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-              ),
-              title: Text('Home')),
-//          BottomNavigationBarItem(
-//              icon: Icon(
-//                Icons.email,
-//              ),
-//              title: Text(
-//                'Contact Us',
-//              ))
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        unselectedItemColor: iconsColorSelector(currentPage),
-        onTap: _onItemTapped,
-        backgroundColor: appBarColorSelector(currentPage),
-      ),
-      body: Builder(
-        builder: (context) => LiquidSwipe(
-          enableLoop: true,
-          fullTransitionValue: 800,
-          enableSlideIcon: true,
-          waveType: WaveType.liquidReveal,
-          positionSlideIcon: 0.0,
-          onPageChangeCallback: (activePageIndex) {
-            currentPage = activePageIndex;
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, "Bot");
           },
-          pages: <Container>[
-            FeedMeWidget(context, opacity),
-            WhiteOrBlackWidget(context, opacity),
-            MemoryWallWidget(context,opacity),
-            Foodometer(context,opacity),
-            MakeMeBreathWidget(context, opacity),
-            BreedMeWidget(context, opacity),
-            PayForMeWidget(context, opacity),
-            FindMeJobWidget(context, opacity),
-            PaintForMeWidget(context, opacity),
-            HelpMeWidget(context, opacity),
-            ChatWithMeWidget(context, opacity),
+          child: Icon(
+            Icons.message,
+            color: iconsColorSelector(currentPage),
+            size: 30,
+          ),
+          backgroundColor: appBarColorSelector(currentPage),
+          heroTag: "bot",
+          tooltip: 'Bot',
+        ),
+        appBar: AppBar(
+          backgroundColor: appBarColorSelector(currentPage),
+          title: Text(
+            '${sessionManager.getUser().user_name} 👋',
+            overflow: TextOverflow.visible,
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.person,
+                size: 30, color: iconsColorSelector(currentPage)),
+            onPressed: () {
+              Navigator.pushNamed(context, "Profile");
+            },
+          ),
+          titleSpacing: 0.1,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.settings_applications),
+              onPressed: () {
+//                  Navigator.pushNamed(context, 'UserDecision');
+              },
+            ),
+//            ),
+            IconButton(
+              icon: Icon(Icons.exit_to_app),
+              onPressed: () {
+                sessionManager.logout();
+                Navigator.of(context).popAndPushNamed('Login');
+              },
+            )
           ],
         ),
-      ),
-    );
+        bottomNavigationBar: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.people), title: Text('Stay in touch')),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home,
+                ),
+                title: Text('Home')),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.amber[800],
+          unselectedItemColor: iconsColorSelector(currentPage),
+          onTap: _onItemTapped,
+          backgroundColor: appBarColorSelector(currentPage),
+        ),
+        body: SafeArea(
+          child: Builder(
+            builder: (context) => LiquidSwipe(
+              enableLoop: true,
+              fullTransitionValue: 800,
+              enableSlideIcon: true,
+              waveType: WaveType.liquidReveal,
+              positionSlideIcon: 0.0,
+              onPageChangeCallback: (activePageIndex) {
+                currentPage = activePageIndex;
+              },
+              pages: <Container>[
+                FeedMeWidget(context, opacity),
+                WhiteOrBlackWidget(context, opacity),
+                MemoryWallWidget(context, opacity),
+                UnderConstruction(context, opacity),
+                Foodometer(context, opacity),
+                MakeMeBreathWidget(context, opacity),
+                BreedMeWidget(context, opacity),
+                PayForMeWidget(context, opacity),
+                FindMeJobWidget(context, opacity),
+                PaintForMeWidget(context, opacity),
+                HelpMeWidget(context, opacity),
+                ChatWithMeWidget(context, opacity),
+              ],
+            ),
+          ),
+        ));
   }
 }
