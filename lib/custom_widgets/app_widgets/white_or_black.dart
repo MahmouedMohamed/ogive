@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_text/gradient_text.dart';
 
-Widget WhiteOrBlackWidget(BuildContext context, double opacity) {
+Widget whiteOrBlackWidget(BuildContext context, double opacity) {
   return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ogive/screens/feed_me_main.dart';
 import 'package:ogive/test.dart';
-import 'custom_widgets/user_decision.dart';
+import 'package:ogive/screens/user_decision.dart';
 import 'screens/feed_me_intro.dart';
 import 'screens/feed_me_marker_creation.dart';
 import 'screens/homePage.dart';

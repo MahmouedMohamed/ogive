@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_text/gradient_text.dart';
 import 'package:toast/toast.dart';
 
-Widget BreedMeWidget(BuildContext context, double opacity) {
+Widget findMeJobWidget(BuildContext context, double opacity) {
   return Container(
       color: Colors.grey,
       foregroundDecoration: BoxDecoration(
@@ -15,22 +14,13 @@ Widget BreedMeWidget(BuildContext context, double opacity) {
         alignment: Alignment.center,
         decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.lime[900],
-              Colors.lime[800],
-              Colors.lime[700],
-              Colors.lime[600],
-              Colors.lime[500],
-              Colors.lime[400],
-              Colors.lime[300],
-              Colors.lime[200],
-              Colors.lime[100],
-              Colors.white],
+                colors: [Colors.pinkAccent, Colors.white],
                 begin: Alignment.topCenter, end: Alignment.bottomCenter
             )),
         child: GestureDetector(
             onTap: () {
-//          Navigator.pushNamed(context, 'BreedMe');
-              Toast.show('Coming Soon', context,duration: 3,backgroundColor: Colors.lime,gravity: 3);
+//          Navigator.pushNamed(context, 'FindMeJob');
+              Toast.show('Coming Soon', context,duration: 3,backgroundColor: Colors.pinkAccent,gravity: 3);
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -42,13 +32,13 @@ Widget BreedMeWidget(BuildContext context, double opacity) {
                     alignment: Alignment.center,
                     child: RichText(
                       textAlign: TextAlign.center,
-                      text: TextSpan(text: 'Breed Me',
+                      text: TextSpan(text: 'Find  Me \n A Job',
                         style: TextStyle(
-                            fontSize: 70,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 50,
+                            fontWeight: FontWeight.w900,
                             fontFamily: 'OpenSans',
                             letterSpacing: 0,
-                            color: Colors.lime[800],
+                            color: Colors.pinkAccent[800],
                             shadows: [Shadow(color: Colors.black,offset: Offset.fromDirection(1,3))]
                         ),
                       ),
@@ -56,9 +46,9 @@ Widget BreedMeWidget(BuildContext context, double opacity) {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.only(top: 10),
                   child: Image.asset(
-                    'assets/images/dogcat.png',
+                    'assets/images/job.png',
                     fit: BoxFit.fill,
                   ),
                 ),

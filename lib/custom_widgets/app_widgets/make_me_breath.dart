@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_text/gradient_text.dart';
 import 'package:toast/toast.dart';
 
-Widget MakeMeBreathWidget(BuildContext context, double opacity) {
+Widget makeMeBreathWidget(BuildContext context, double opacity) {
   return Container(
     color: Colors.grey,
     foregroundDecoration: BoxDecoration(

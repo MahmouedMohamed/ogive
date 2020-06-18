@@ -7,11 +7,13 @@ Future<int> deleteMarker(oauthToken,markerId) async {
   String url = URL + 'marker'+'?id=$markerId';
   var headers = {
     "Accpet": "application/json",
-    "Content-Type": "application/json","Authorization": "Bearer "+oauthToken
+    "Content-Type": "application/json",
+    "Authorization": "Bearer "+oauthToken
   };
   var response = await http.delete(Uri.encodeFull(url),headers: headers);
   return response.statusCode;
 }
+
 Future<int> deleteMemory(oauthToken,memoryId) async {
   print('thing $memoryId');
   String url = URL + 'memory'+'?id=$memoryId';
@@ -21,6 +23,5 @@ Future<int> deleteMemory(oauthToken,memoryId) async {
     "Authorization": "Bearer "+oauthToken
   };
   var response = await http.delete(Uri.encodeFull(url),headers: headers);
-  print('thing ${response.body}');
   return response.statusCode;
 }

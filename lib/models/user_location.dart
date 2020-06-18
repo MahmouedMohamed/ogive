@@ -3,18 +3,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class UserLocation{
   Position currentLocation;
-  LatLng _latLng;
+  LatLng latLng;
   Future<Position> locateUser() async {
     return Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
   getUserLocation() async {
     currentLocation = await locateUser();
-    _latLng = LatLng(currentLocation.latitude, currentLocation.longitude);
-    print('center $_latLng');
+    latLng = LatLng(currentLocation.latitude, currentLocation.longitude);
+    print('center $latLng');
   }
   LatLng getLatLng(){
-    return _latLng;
+    return latLng;
   }
   updateLatLng(){
     getUserLocation();

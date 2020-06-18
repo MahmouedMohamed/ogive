@@ -67,7 +67,8 @@ class _SplashScreen extends State<SplashScreen>
       Timer.periodic(Duration(seconds: 1), (timer) => {
         if (mounted) {
           setState(() {
-            value += 0.02;
+//            value += 0.02;
+          value+=1.0;
           })
         }
       });

@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
-import 'package:ogive/custom_widgets/breed_me.dart';
-import 'package:ogive/custom_widgets/chat_with_me.dart';
-import 'package:ogive/custom_widgets/feed_me.dart';
-import 'package:ogive/custom_widgets/find_me_a_job.dart';
-import 'package:ogive/custom_widgets/help_me.dart';
-import 'package:ogive/custom_widgets/make_me_breath.dart';
-import 'package:ogive/custom_widgets/paint_for_me.dart';
-import 'package:ogive/custom_widgets/pay_for_me.dart';
-import 'package:ogive/custom_widgets/white_or_black.dart';
-import 'package:ogive/custom_widgets/memory_wall.dart';
-import 'package:ogive/custom_widgets/foodometer.dart';
-import 'package:ogive/custom_widgets/under_construction.dart';
+import 'package:ogive/custom_widgets/app_widgets/breed_me.dart';
+import 'package:ogive/custom_widgets/app_widgets/chat_with_me.dart';
+import 'package:ogive/custom_widgets/app_widgets/feed_me.dart';
+import 'package:ogive/custom_widgets/app_widgets/find_me_a_job.dart';
+import 'package:ogive/custom_widgets/app_widgets/help_me.dart';
+import 'package:ogive/custom_widgets/app_widgets/make_me_breath.dart';
+import 'package:ogive/custom_widgets/app_widgets/paint_for_me.dart';
+import 'package:ogive/custom_widgets/app_widgets/pay_for_me.dart';
+import 'package:ogive/custom_widgets/app_widgets/white_or_black.dart';
+import 'package:ogive/custom_widgets/app_widgets/memory_wall.dart';
+import 'package:ogive/custom_widgets/app_widgets/foodometer.dart';
+import 'package:ogive/custom_widgets/app_widgets/under_construction.dart';
 import '../session_manager.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -239,7 +239,7 @@ class _HomePageState extends State<HomePage>
         appBar: AppBar(
           backgroundColor: appBarColorSelector(currentPage),
           title: Text(
-            '${sessionManager.getUser().user_name} 👋',
+            '${sessionManager.getUser().userName} 👋',
             overflow: TextOverflow.visible,
           ),
           centerTitle: true,
@@ -296,18 +296,18 @@ class _HomePageState extends State<HomePage>
                 currentPage = activePageIndex;
               },
               pages: <Container>[
-                FeedMeWidget(context, opacity),
-                WhiteOrBlackWidget(context, opacity),
-                MemoryWallWidget(context, opacity),
-                UnderConstruction(context, opacity),
-                Foodometer(context, opacity),
-                MakeMeBreathWidget(context, opacity),
-                BreedMeWidget(context, opacity),
-                PayForMeWidget(context, opacity),
-                FindMeJobWidget(context, opacity),
-                PaintForMeWidget(context, opacity),
-                HelpMeWidget(context, opacity),
-                ChatWithMeWidget(context, opacity),
+                feedMeWidget(context, opacity),
+                whiteOrBlackWidget(context, opacity),
+                memoryWallWidget(context, opacity),
+                foodometer(context, opacity),
+                makeMeBreathWidget(context, opacity),
+                breedMeWidget(context, opacity),
+                payForMeWidget(context, opacity),
+                findMeJobWidget(context, opacity),
+                paintForMeWidget(context, opacity),
+                helpMeWidget(context, opacity),
+                chatWithMeWidget(context, opacity),
+                underConstruction(context, opacity),
               ],
             ),
           ),

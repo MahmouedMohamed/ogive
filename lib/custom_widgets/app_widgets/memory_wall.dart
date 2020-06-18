@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_text/gradient_text.dart';
-import 'package:toast/toast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Widget MemoryWallWidget(BuildContext context, double opacity) {
+Widget memoryWallWidget(BuildContext context, double opacity) {
   return Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -14,8 +12,7 @@ Widget MemoryWallWidget(BuildContext context, double opacity) {
         ),
         child: GestureDetector(
             onTap: () {
-          Navigator.pushNamed(context, 'MemoryWall');
-//              Toast.show('Coming Soon', context,duration: 3,backgroundColor: Colors.blue,gravity: 3);
+                Navigator.pushNamed(context, 'MemoryWall');
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,

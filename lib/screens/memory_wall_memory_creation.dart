@@ -35,7 +35,7 @@ class _MemoryCreationState extends State<MemoryCreation> {
   }
 
   _onPressed() async {
-    if (await createMemory(sessionManager.oauthToken,sessionManager.getUser().ID, personName.text,
+    if (await createMemory(sessionManager.oauthToken,sessionManager.getUser().id, personName.text,
             birthDate, deathDate, lifeStory.text, image) ==
         'done') {
       Toast.show('Memory will always remain!', context);

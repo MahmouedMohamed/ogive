@@ -105,7 +105,7 @@ class _MemoryWallState extends State<MemoryWall> {
                                     },
                                     itemBuilder: (context) {
                                       return (memories[index].userId ==
-                                              sessionManager.getUser().ID
+                                              sessionManager.getUser().id
                                           ? [
                                               PopupMenuItem(
                                                   value:
@@ -176,7 +176,7 @@ class _MemoryWallState extends State<MemoryWall> {
                                     icon: Icon(
                                       FontAwesomeIcons.heart,
                                       color: memories[index]
-                                              .inIn(sessionManager.getUser().ID)
+                                              .inIn(sessionManager.getUser().id)
                                           ? Colors.red
                                           : Colors.white,
                                     ),
@@ -184,7 +184,7 @@ class _MemoryWallState extends State<MemoryWall> {
                                       setState(() {
                                         Toast.show('Refreshing', context);
                                         likeUnlikeMemory(sessionManager.oauthToken,memories[index].id,
-                                            sessionManager.getUser().ID);
+                                            sessionManager.getUser().id);
                                       });
                                     },
                                   ),

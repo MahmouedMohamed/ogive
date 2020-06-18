@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:toast/toast.dart';
 
-Widget PaintForMeWidget(BuildContext context, double opacity) {
+Widget paintForMeWidget(BuildContext context, double opacity) {
   return Container(
       color: Colors.grey,
       foregroundDecoration: BoxDecoration(

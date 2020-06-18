@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:toast/toast.dart';
 
-Widget FindMeJobWidget(BuildContext context, double opacity) {
+Widget foodometer(BuildContext context, double opacity) {
   return Container(
       color: Colors.grey,
       foregroundDecoration: BoxDecoration(
@@ -15,13 +15,17 @@ Widget FindMeJobWidget(BuildContext context, double opacity) {
         alignment: Alignment.center,
         decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [Colors.pinkAccent, Colors.white],
-                begin: Alignment.topCenter, end: Alignment.bottomCenter
+                colors: [
+                  Colors.orange,
+                  Colors.white
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter
             )),
         child: GestureDetector(
             onTap: () {
-//          Navigator.pushNamed(context, 'FindMeJob');
-              Toast.show('Coming Soon', context,duration: 3,backgroundColor: Colors.pinkAccent,gravity: 3);
+//          Navigator.pushNamed(context, 'PayForMe');
+              Toast.show('Coming Soon', context,duration: 3,backgroundColor: Colors.amber,gravity: 3);
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -33,13 +37,13 @@ Widget FindMeJobWidget(BuildContext context, double opacity) {
                     alignment: Alignment.center,
                     child: RichText(
                       textAlign: TextAlign.center,
-                      text: TextSpan(text: 'Find  Me \n A Job',
+                      text: TextSpan(text: 'FoodOmeter',
                         style: TextStyle(
                             fontSize: 50,
                             fontWeight: FontWeight.w900,
                             fontFamily: 'OpenSans',
                             letterSpacing: 0,
-                            color: Colors.pinkAccent[800],
+                            color: Colors.orange[800],
                             shadows: [Shadow(color: Colors.black,offset: Offset.fromDirection(1,3))]
                         ),
                       ),
@@ -47,10 +51,10 @@ Widget FindMeJobWidget(BuildContext context, double opacity) {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.only(top: 20),
                   child: Image.asset(
-                    'assets/images/job.png',
-                    fit: BoxFit.fill,
+                    'assets/images/foodometer.png',
+                    height: MediaQuery.of(context).size.height/5,
                   ),
                 ),
               ],

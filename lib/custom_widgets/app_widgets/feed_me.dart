@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget FeedMeWidget(BuildContext context, double opacity) {
+Widget feedMeWidget(BuildContext context, double opacity) {
   return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,

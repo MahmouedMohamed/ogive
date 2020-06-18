@@ -1,81 +1,72 @@
-import 'dart:core';
-
 class User {
-  String ID;
+  String id;
   String name;
-  String user_name;
+  String userName;
   String email;
-  DateTime email_verified_at;
-  DateTime created_at;
-  DateTime updated_at;
-  User(this.ID, this.name, this.user_name, this.email, this.email_verified_at,
-      this.created_at, this.updated_at);
+  DateTime emailVerifiedAt;
+  DateTime createdAt;
+  DateTime updatedAt;
+  User(this.id, this.name, this.userName, this.email, this.emailVerifiedAt,
+      this.createdAt, this.updatedAt);
 
-  setID(ID) {
-    this.ID = ID;
+  setId(id) {
+    this.id = id;
+  }
+  getId() {
+    return id;
   }
 
   setEmail(email) {
     this.email = email;
   }
-
-  setName(name) {
-    this.name = name;
-  }
-
-  getID() {
-    return ID;
-  }
-
   getEmail() {
     return email;
   }
 
+  setName(name) {
+    this.name = name;
+  }
   getName() {
     return name;
   }
 
-  getUser_name() {
-    return user_name;
+  setUserName(String userName) {
+    this.userName = userName;
+  }
+  getUserName() {
+    return userName;
   }
 
-  setUser_name(String user_name) {
-    this.user_name = user_name;
+  setEmailVerifiedAt(DateTime emailVerifiedAt) {
+    this.emailVerifiedAt = emailVerifiedAt;
+  }
+  getEmailVerifiedAt() {
+    return emailVerifiedAt;
   }
 
-  getEmail_verified_at() {
-    return email_verified_at;
+  setCreatedAt(DateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+  getCreatedAt() {
+    return createdAt;
   }
 
-  setEmail_verified_at(DateTime email_verified_at) {
-    this.email_verified_at = email_verified_at;
+  setUpdatedAt(DateTime updatedAt) {
+    this.updatedAt = updatedAt;
   }
-
-  getCreated_at() {
-    return created_at;
-  }
-
-  setCreated_at(DateTime created_at) {
-    this.created_at = created_at;
-  }
-
-  getUpdated_at() {
-    return updated_at;
-  }
-
-  setUpdated_at(DateTime updated_at) {
-    this.updated_at = updated_at;
+  getUpdatedAt() {
+    return updatedAt;
   }
 
   toList() {
     return [
-      ID,
+      id,
       name,
-      user_name,
+      userName,
       email,
-      email_verified_at.toString(),
-      created_at.toString(),
-      updated_at.toString(),
+      emailVerifiedAt.toString(),
+      createdAt.toString(),
+      updatedAt.toString(),
     ];
   }
 }

@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
 final String URL = 'http://192.168.1.100:8000/api/';
+
 Future<Map<String, dynamic>> register(
     fullName, userName, email, password) async {
   var body = {
@@ -20,20 +20,17 @@ Future<Map<String, dynamic>> register(
     var convertDataToJson = jsonDecode(response.body);
     String nameError, userNameError, emailError, passwordError;
     if (convertDataToJson['status'] == 'undone') {
-      for (int i = 0; i < convertDataToJson['details'].length; i++) {
-        if (convertDataToJson['details'][i].toString().contains('The name'))
-          nameError = convertDataToJson['details'][i];
-        else if (convertDataToJson['details'][i]
-            .toString()
-            .contains('user name'))
-          userNameError = convertDataToJson['details'][i];
-        else if (convertDataToJson['details'][i].toString().contains('email'))
-          emailError = convertDataToJson['details'][i];
-        else if (convertDataToJson['details'][i]
-            .toString()
-            .contains('password'))
-          passwordError = convertDataToJson['details'][i];
-      }
+      List<dynamic> errorDetails = convertDataToJson['details'];
+      errorDetails.forEach((errorDetail) {
+        if (errorDetail.toString().contains('The name'))
+          nameError = errorDetail;
+        else if (errorDetail.toString().contains('user name'))
+          userNameError = errorDetail;
+        else if (errorDetail.toString().contains('email'))
+          emailError = errorDetail;
+        else if (errorDetail.toString().contains('password'))
+          passwordError = errorDetail;
+      });
       List<String> error = [
         nameError,
         userNameError,
@@ -62,16 +59,13 @@ Future<Map<String, dynamic>> createMarker(oauthToken,
   };
   var response = await http.post(Uri.encodeFull(URL + 'marker'),
       headers: {"Accpet": "application/json","Authorization": "Bearer "+oauthToken}, body: body);
-  print('thing ${response.body}');
   var convertDataToJson = jsonDecode(response.body);
   if (response.statusCode != 200) {
-    print(convertDataToJson);
     return {
       "status": convertDataToJson['status'],
       "details": convertDataToJson['details'],
     };
   } else {
-    print(convertDataToJson);
     return {
       "status": convertDataToJson['status'],
     };
@@ -92,7 +86,6 @@ Future<String> createMemory(oauthToken,
   var response = await Dio().post(URL + 'memory', data: formData,options: Options(
     headers: {"Authorization": "Bearer "+oauthToken}
   ));
-  print('thing ${response}');
   var convertDataToJson = jsonDecode(response.toString());
   if (convertDataToJson['status'] != 'undone') {
     return 'done';
@@ -100,6 +93,7 @@ Future<String> createMemory(oauthToken,
     return 'undone';
   }
 }
+
 Future<String> likeUnlikeMemory(oauthToken,
     memoryId, userId) async {
   var body = {
@@ -108,9 +102,7 @@ Future<String> likeUnlikeMemory(oauthToken,
   };
   var response = await http.post(Uri.encodeFull(URL + 'like'),
       headers: {"Accpet": "application/json","Authorization": "Bearer "+oauthToken}, body: body);
-  print('thing ${response.body}');
   var convertDataToJson = jsonDecode(response.body);
-  print('thing ${response}');
   if (convertDataToJson['status'] != 'undone') {
     return 'done';
   } else {

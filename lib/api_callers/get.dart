@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:ogive/custom_widgets/marker_icon.dart';
@@ -8,36 +7,32 @@ import 'package:ogive/models/like.dart';
 import 'package:ogive/models/memory.dart';
 import 'package:ogive/models/user.dart';
 import 'package:ogive/models/weather.dart';
-import 'package:dio/dio.dart';
+
 final String URL = 'http://192.168.1.100:8000/api/';
+
 Future<List<Marker>> getMarkers(String oauthToken) async {
-  List markers;
-//  List properties;
-  MarkerIcon markerOption = new MarkerIcon();
+//  MarkerIcon markerOption = new MarkerIcon();      ///for custom marker icon
   List<Marker> returnedMarkers = new List<Marker>();
   var response = await http.get(Uri.encodeFull(URL + 'markers'),
       headers: {"Accpet": "application/json","Authorization": "Bearer "+oauthToken});
-  print('thing ${response.body}');
   var convertDataToJson = jsonDecode(response.body);
-  print('thing $convertDataToJson');
-  markers = convertDataToJson['markers'];
-  print('thing $markers');
-//  properties = convertDataToJson['properties'];
-  for (int i = 0; i < markers.length; i++) {
-    MarkerId markerId = new MarkerId(markers[i]['id'].toString());
-    double latitude = double.parse(markers[i]['Latitude'].toString());
-    double longitude = double.parse(markers[i]['Longitude'].toString());
-    returnedMarkers.add(Marker(
-      markerId: markerId,
-      position: LatLng(latitude, longitude),
+  List markers = convertDataToJson['markers'];
+  markers.forEach((marker) {
+    returnedMarkers.add(
+        Marker(
+      markerId: new MarkerId(marker['id'].toString()),
+      position: LatLng(
+          double.parse(marker['Latitude'].toString()),
+          double.parse(marker['Longitude'].toString())
+      ),
 //      icon: markerOption.getIcon(),
-      icon: getMarkerColor(markers[i]['food']['priority']),
+      icon: getMarkerColor(marker['food']['priority']),
       infoWindow: InfoWindow(
-          title: markers[i]['food']['name'],
-          snippet: markers[i]['food']['description'] +
-              ' \nQuantity = ${markers[i]['food']['quantity']}'),
+          title: marker['food']['name'],
+          snippet: marker['food']['description'] +
+              ' \nQuantity = ${marker['food']['quantity']}'),
     ));
-  }
+  });
   return returnedMarkers;
 }
 
@@ -45,9 +40,13 @@ getMarkerColor(priority) {
   switch (priority) {
     case 1:
       return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
-    case 4:
+    case 3:
       return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
     case 5:
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure);
+    case 7:
+      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
+    case 10:
       return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
   }
 }
@@ -106,7 +105,6 @@ Future<Map<String, dynamic>> getUser(email, password) async {
       "oauthToken": convertDataToJson['token'],
       "user": user
     };
-    print('thing  $map');
     return map;
   }
 }
@@ -117,39 +115,39 @@ Future<List<Memory>> getMemories(String oauthToken) async {
       headers: {"Accpet": "application/json","Authorization": "Bearer "+oauthToken});
   var convertDataToJson = jsonDecode(response.body);
   List memories = convertDataToJson['memories'];
-  print('thing $memories');
-  for (int i = 0; i < memories.length; i++) {
+  memories.forEach((memory) {
     List returnedLikes = new List<Like>();
-    if(memories[i]['likes']!=null){
-      List likes = memories[i]['likes'];
-      for (int j = 0; j < likes.length; j++) {
+    if(memory['likes']!=null){
+      List likes = memory['likes'];
+      likes.forEach((like) {
         returnedLikes.add(new Like(
-          likes[j]['memory_id'].toString(),
-          likes[j]['user_id'].toString(),
+          like['memory_id'].toString(),
+          like['user_id'].toString(),
         ));
-      }
+      });
     }
     returnedMemories.add(
       new Memory(
-          memories[i]['id'].toString(),
-          memories[i]['user_id'].toString(),
-          memories[i]['person_name'].toString(),
-          DateTime.parse(memories[i]['birth']),
-          DateTime.parse(memories[i]['death']),
-          memories[i]['life_story'].toString(),
-          memories[i]['image'].toString(),
+          memory['id'].toString(),
+          memory['user_id'].toString(),
+          memory['person_name'].toString(),
+          DateTime.parse(memory['birth']),
+          DateTime.parse(memory['death']),
+          memory['life_story'].toString(),
+          memory['image'].toString(),
           returnedLikes),
     );
-  }
+  });
   return returnedMemories;
 }
+
 Future<Map<String,dynamic>> getJob() async {
   var response = await http.get(Uri.encodeFull('https://remotive.io/api/remote-jobs?limit=100'),
       headers: {"Accpet": "application/json"});
   var convertDataToJson = jsonDecode(response.body);
-//  print('thing ${convertDataToJson['jobs'].length}');
   return convertDataToJson;
 }
+
 Future<String> getQuote() async {
   var response = await http.get(Uri.encodeFull('https://api.fisenko.net/quotes?l=en'),
       headers: {"Accpet": "application/json"});
@@ -163,6 +161,7 @@ Future<Map<String,dynamic>> getNews(query,pageNumber) async {
   var convertDataToJson = jsonDecode(response.body);
   return convertDataToJson;
 }
+
 Future<String> getSpaceNews() async {
   var response = await http.get(Uri.encodeFull('https://api.spacexdata.com/v3/launches/latest'),
       headers: {"Accpet": "application/json"});

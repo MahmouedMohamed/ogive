@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_text/gradient_text.dart';
 import 'package:toast/toast.dart';
 
-Widget HelpMeWidget(BuildContext context, double opacity) {
+Widget breedMeWidget(BuildContext context, double opacity) {
   return Container(
       color: Colors.grey,
       foregroundDecoration: BoxDecoration(
@@ -15,13 +14,22 @@ Widget HelpMeWidget(BuildContext context, double opacity) {
         alignment: Alignment.center,
         decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [Colors.tealAccent, Colors.white],
+              colors: [Colors.lime[900],
+              Colors.lime[800],
+              Colors.lime[700],
+              Colors.lime[600],
+              Colors.lime[500],
+              Colors.lime[400],
+              Colors.lime[300],
+              Colors.lime[200],
+              Colors.lime[100],
+              Colors.white],
                 begin: Alignment.topCenter, end: Alignment.bottomCenter
             )),
         child: GestureDetector(
             onTap: () {
-//          Navigator.pushNamed(context, 'HelpMe');
-              Toast.show('Coming Soon', context,duration: 3,backgroundColor: Colors.tealAccent,gravity: 3);
+//          Navigator.pushNamed(context, 'BreedMe');
+              Toast.show('Coming Soon', context,duration: 3,backgroundColor: Colors.lime,gravity: 3);
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -33,13 +41,13 @@ Widget HelpMeWidget(BuildContext context, double opacity) {
                     alignment: Alignment.center,
                     child: RichText(
                       textAlign: TextAlign.center,
-                      text: TextSpan(text: 'Help Me',
+                      text: TextSpan(text: 'Breed Me',
                         style: TextStyle(
-                            fontSize: 50,
-                            fontWeight: FontWeight.w900,
+                            fontSize: 70,
+                            fontWeight: FontWeight.w600,
                             fontFamily: 'OpenSans',
                             letterSpacing: 0,
-                            color: Colors.teal[800],
+                            color: Colors.lime[800],
                             shadows: [Shadow(color: Colors.black,offset: Offset.fromDirection(1,3))]
                         ),
                       ),
@@ -49,7 +57,7 @@ Widget HelpMeWidget(BuildContext context, double opacity) {
                 Padding(
                   padding: EdgeInsets.only(top: 20),
                   child: Image.asset(
-                    'assets/images/help.png',
+                    'assets/images/dogcat.png',
                     fit: BoxFit.fill,
                   ),
                 ),

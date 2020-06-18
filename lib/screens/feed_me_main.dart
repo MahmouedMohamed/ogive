@@ -1,16 +1,13 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ogive/api_callers/delete.dart';
 import 'package:ogive/api_callers/get.dart';
-import 'package:ogive/api_callers/put.dart';
 import 'package:ogive/models/user_location.dart';
 import 'package:toast/toast.dart';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart' as math;
-
 import '../session_manager.dart';
 
 class FeedMe extends StatefulWidget {
@@ -23,8 +20,7 @@ class _FeedMeState extends State<FeedMe> {
   UserLocation userLocation;
   List<Marker> markers;
   bool following = false;
-  Marker chosedMarker;
-  bool acquired = false;
+  Marker chosenMarker;
   SessionManager sessionManager = new SessionManager();
   @override
   void initState() {
@@ -32,24 +28,20 @@ class _FeedMeState extends State<FeedMe> {
     userLocation = new UserLocation();
   }
 
-  double CalculationByDistance(LatLng StartP, LatLng EndP) {
-    int Radius = 6371; // radius of earth in Km
-    double lat1 = StartP.latitude;
-    double lat2 = EndP.latitude;
-    double lon1 = StartP.longitude;
-    double lon2 = EndP.longitude;
-    double dLat = math.radians(lat2 - lat1);
-    double dLon = math.radians(lon2 - lon1);
+  double calculateDistance(LatLng startPoint, LatLng endPoint) {
+    int radius = 6371; // radius of earth in Km
+    double dLat = math.radians(endPoint.latitude - startPoint.latitude);
+    double dLon = math.radians(endPoint.longitude - startPoint.longitude);
     double a = sin(dLat / 2) * sin(dLat / 2) +
-        cos(math.radians(lat1)) *
-            cos(math.radians(lat2)) *
+        cos(math.radians(startPoint.latitude)) *
+            cos(math.radians(endPoint.latitude)) *
             sin(dLon / 2) *
             sin(dLon / 2);
     double c = 2 * asin(sqrt(a));
-    return Radius * c;
+    return radius * c;
   }
 
-  void _onMarkerTapped(MarkerId markerId) {
+  void onMarkerTapped(MarkerId markerId) {
     Marker tappedMarker;
     int i = 0;
     for (; i < markers.length; i++) {
@@ -69,12 +61,10 @@ class _FeedMeState extends State<FeedMe> {
       child: Text("Go And Get IT!"),
       onPressed: () {
         setState(() {
-          chosedMarker = markers[index];
-          print('LatLng ${markers.length}');
+          chosenMarker = markers[index];
           markers.clear();
-          print('LatLng ${markers.length}');
         });
-        markers.add(chosedMarker);
+        markers.add(chosenMarker);
         following = true;
         Navigator.of(context).pop();
       },
@@ -82,16 +72,13 @@ class _FeedMeState extends State<FeedMe> {
     Widget cancelButton = FlatButton(
       child: Text("Cancel"),
       onPressed: () async {
-        await deleteMarker(sessionManager.oauthToken,markers[index].markerId.value);
-        setState(() {});
         Navigator.of(context).pop();
       },
     );
     // set up the AlertDialog
-    print('LatLng ${userLocation.getLatLng()} , ${markers[index].position}');
     AlertDialog alert = AlertDialog(
       title: Text("${markers[index].infoWindow.title}"),
-      content: Text('${(CalculationByDistance(userLocation.getLatLng(), markers[index].position) * 1000).toStringAsFixed(2)} meter to get it'
+      content: Text('${(calculateDistance(userLocation.getLatLng(), markers[index].position) * 1000).toStringAsFixed(2)} meter to get it'
         +'\n${markers[index].infoWindow.snippet}'
         ,
       ),
@@ -116,10 +103,9 @@ class _FeedMeState extends State<FeedMe> {
     }
 
     following ? 1 : markers = await getMarkers(sessionManager.oauthToken);
-    print('markers ${markers.length}');
     for (int i = 0; i < markers.length; i++) {
       markers[i] = markers.elementAt(i).copyWith(onTapParam: () {
-        _onMarkerTapped(markers.elementAt(i).markerId);
+        onMarkerTapped(markers.elementAt(i).markerId);
       });
     }
     return googleMap = GoogleMap(
@@ -192,23 +178,19 @@ class _FeedMeState extends State<FeedMe> {
   }
 
   Future<Widget> thanksMessage() async {
-    print('thing here');
     if (userLocation.getLatLng() == null) {
-      print('thing awaiting userLocation');
       await userLocation.getUserLocation();
     }
-    while (CalculationByDistance(
+    while (calculateDistance(
                 userLocation.getLatLng(), markers.elementAt(0).position) *
             1000 >
         10) {
-      print(
-          'thing Calling it ${CalculationByDistance(userLocation.getLatLng(), markers.elementAt(0).position) * 1000}');
       await userLocation.getUserLocation();
     }
     return AlertDialog(
       title: Text("Did you got it?"),
       content: Text(
-          'it seems that you are ${num.parse((CalculationByDistance(userLocation.getLatLng(), markers[0].position) * 1000).toStringAsFixed(2))} Meter away from.'),
+          'it seems that you are ${num.parse((calculateDistance(userLocation.getLatLng(), markers[0].position) * 1000).toStringAsFixed(2))} Meter away from.'),
       actions: [
         FlatButton(
             child: Text("Yes i got it!"),

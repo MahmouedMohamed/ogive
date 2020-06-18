@@ -40,7 +40,6 @@ class Memory {
   }
   inIn(userId){
     for(int i=0;i<likes.length;i++){
-//      print('thing ${likes[i].userId} $userId');
       if(likes[i].userId==userId){
         return true;
       }

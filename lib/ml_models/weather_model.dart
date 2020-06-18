@@ -4,26 +4,7 @@ import 'package:stats/stats.dart';
 import 'dart:math' as math;
 import 'package:path_provider/path_provider.dart';
 class Model {
-  List<String> _days = [
-    'D1',
-    'D2',
-    'D3',
-    'D4',
-    'D5',
-    'D6',
-    'D7',
-    'D8',
-    'D9',
-    'D10',
-    'D11',
-    'D12',
-    'D13',
-    'D14',
-    'D15',
-    'D16',
-    'D17',
-  ];
-  List<String> _outlook = [
+  List<String> outlookData = [
     'sunny',
     'sunny',
     'clouds',
@@ -42,7 +23,7 @@ class Model {
     'sunny',
     'clouds'
   ];
-  List<double> _doubleTemperature = [
+  List<double> temperatureData = [
     27.3,
     30.1,
     25.2,
@@ -61,7 +42,7 @@ class Model {
     20.0,
     32.0
   ];
-  List<double> _doubleHumidity= [
+  List<double> humidityData= [
     0.55,
     0.25,
     0.35,
@@ -80,7 +61,7 @@ class Model {
     0.4,
     0.7
   ];
-  List<double> _doubleWind = [
+  List<double> windData = [
     5.7056,
     14.176,
     4.7056,
@@ -99,7 +80,7 @@ class Model {
     5.0,
     4.0
   ];
-  List<String> _decision = [
+  List<String> decision = [
     'no',
     'no',
     'yes',
@@ -118,36 +99,31 @@ class Model {
     'yes',
     'no'
   ]; //wear white?
-  _read() async {
+
+   readPreviousData() async {
     List<String> fileNames = ['outlook','temperature','humidity','windSpeed','decision'];
     try {
       final directory = await getApplicationDocumentsDirectory();
-      for(int i=0;i<fileNames.length;i++){
-        final file = File('${directory.path}/${fileNames.elementAt(i)}.txt');
+      for(int fileIndex=0; fileIndex<fileNames.length; fileIndex++){
+        final file = File('${directory.path}/${fileNames.elementAt(fileIndex)}.txt');
         String text = await file.readAsString();
-        List<String> _list = text.split(' ');
-        _list.removeLast();
-        print('thing $_list');
-        switch(i){
+        List<String> values = text.split(' ');
+        values.removeLast();   //remove last space
+        switch(fileIndex){
           case 0:
-            _list.forEach((element) {_outlook.add(element);});
-            print('thing $_outlook');
+            values.forEach((value) {outlookData.add(value);});
             break;
           case 1:
-            _list.forEach((element) {_doubleTemperature.add(double.parse(element));});
-            print('thing $_doubleTemperature');
+            values.forEach((value) {temperatureData.add(double.parse(value));});
             break;
           case 2:
-            _list.forEach((element) {_doubleHumidity.add(double.parse(element));});
-            print('thing $_doubleHumidity');
+            values.forEach((value) {humidityData.add(double.parse(value));});
             break;
           case 3:
-            _list.forEach((element) {_doubleWind.add(double.parse(element));});
-            print('thing $_doubleWind');
+            values.forEach((value) {windData.add(double.parse(value));});
             break;
           case 4:
-            _list.forEach((element) {_decision.add(element);});
-            print('thing $_decision');
+            values.forEach((value) {decision.add(value);});
             break;
         }
       }
@@ -155,75 +131,21 @@ class Model {
       print("thing Couldn't read file");
     }
   }
-  test(outlook, temperature, humidity, wind) async {
-    await _read();
-    List<List<double>> decisionYes = new List<List<double>>();
-    List<List<double>> decisionNo = new List<List<double>>();
-    List<List<double>> list = [
-      _doubleTemperature,
-      _doubleHumidity,
-      _doubleWind
-    ];
-    List<double> testList = [temperature, humidity, wind];
-    List<double> finalYes = new List<double>();
-    List<double> finalNo = new List<double>();
 
-    double totalYes = 0;
-    double totalNo = 0;
-    for (int i = 0; i < _decision.length; i++) {
-      if (_decision.elementAt(i) == 'yes') {
-        totalYes++;
-      } else if (_decision.elementAt(i) == 'no') {
-        totalNo++;
+  /// get probability for outlook
+  List<double> getOutlookProbability(outlookTestValue, double totalYes,double totalNo){
+    double yesCounter = 0;
+    double noCounter = 0;
+    for (int i = 0; i < outlookData.length; i++) {
+      if (outlookTestValue == outlookData.elementAt(i) &&
+          decision.elementAt(i) == 'yes') {
+        yesCounter++;
+      } else if (outlookTestValue == outlookData.elementAt(i) &&
+          decision.elementAt(i) == 'no') {
+        noCounter++;
       }
     }
-    double counter1 = 0;
-    double counter2 = 0;
-    for (int i = 0; i < _outlook.length; i++) {
-      if (outlook == _outlook.elementAt(i) && _decision.elementAt(i) == 'yes') {
-        counter1++;
-      } else if (outlook == _outlook.elementAt(i) &&
-          _decision.elementAt(i) == 'no') {
-        counter2++;
-      }
-    }
-    finalYes.add(counter1 / totalYes);
-    finalNo.add(counter2 / totalNo);
-
-    for (int i = 0; i < list.length; i++) {
-      List<double> listoYES = new List<double>();
-      List<double> listoNO = new List<double>();
-      for (int j = 0; j < list.elementAt(i).length; j++) {
-        if (_decision.elementAt(j) == 'yes') {
-          listoYES.add(list.elementAt(i).elementAt(j));
-        } else if (_decision.elementAt(j) == 'no') {
-          listoNO.add(list.elementAt(i).elementAt(j));
-        }
-      }
-      decisionYes.add(listoYES);
-      decisionNo.add(listoNO);
-    }
-    for (int i = 0; i < list.length; i++) {
-      finalYes
-          .add(getProbability(decisionYes.elementAt(i), testList.elementAt(i)));
-      finalNo
-          .add(getProbability(decisionNo.elementAt(i), testList.elementAt(i)));
-    }
-    double resultYes = 1;
-    double resultNo = 1;
-    finalYes.forEach((element) {
-      resultYes =
-          resultYes * (element == 0 ? (1 / 4) / (totalYes + 1) : element);
-    });
-    finalNo.forEach((element) {
-      resultNo = resultNo * (element == 0 ? (1 / 4) / (totalNo + 1) : element);
-    });
-    print('thing resultYes ${resultYes}');
-    print('thing resultNo ${resultNo}');
-    if(resultYes > resultNo)
-      return 'yes';
-    else
-      return 'no';
+    return [yesCounter / totalYes , noCounter / totalNo];
   }
 
   getProbability(list, testValue) {
@@ -231,5 +153,79 @@ class Model {
     return (1 / (math.sqrt(2 * math.pi) * (stats.standardDeviation))) *
         (math.exp(-math.pow((testValue - stats.average), 2) /
             (2 * (math.pow(stats.standardError, 2)))));
+  }
+
+  Future<String> test(outlookTestValue, temperatureTestValue, humidityTestValue, windTestValue) async {
+    await readPreviousData();
+    List<List<double>> allData =  // to prevent looping 3 times
+    [
+      temperatureData,
+      humidityData,
+      windData
+    ];
+    List<double> testList = [temperatureTestValue, humidityTestValue, windTestValue];
+    List<double> yesProbability = new List<double>(); //yes probability for each criteria
+    List<double> noProbability = new List<double>(); //no probability for each criteria
+
+    double totalYes = 0;
+    double totalNo = 0;
+
+    for (int i = 0; i < decision.length; i++) {
+      if (decision.elementAt(i) == 'yes') {
+        totalYes++;
+      } else if (decision.elementAt(i) == 'no') {
+        totalNo++;
+      }
+    }
+
+    List<double> outlookProbability = getOutlookProbability(outlookTestValue,totalYes,totalNo);
+    yesProbability.add(outlookProbability.elementAt(0));
+    noProbability.add(outlookProbability.elementAt(1));
+
+    // for each criteria divide elements based on decision
+    List<List<double>> decisionYes = new List<List<double>>();
+    List<List<double>> decisionNo = new List<List<double>>();
+
+    //for each of data in each criteria get referred decision
+    allData.forEach((criteria) {
+      List<double> listOfYes = new List<double>();
+      List<double> listOfNo = new List<double>();
+      for (int index = 0; index < criteria
+          .length; index++) {
+        if (decision.elementAt(index) == 'yes') {
+          listOfYes.add(criteria.elementAt(index));
+        } else if (decision.elementAt(index) == 'no') {
+          listOfNo.add(criteria.elementAt(index));
+        }
+      }
+      decisionYes.add(listOfYes);
+      decisionNo.add(listOfNo);
+
+    });
+
+    // get the probabilities for the other criteria [windSpeed ,etc..]
+    for (int i = 0; i < allData.length; i++) {
+      yesProbability
+          .add(getProbability(decisionYes.elementAt(i), testList.elementAt(i)));
+      noProbability
+          .add(getProbability(decisionNo.elementAt(i), testList.elementAt(i)));
+    }
+
+    double resultYes = 1;
+    double resultNo = 1;
+    yesProbability.forEach((element) {
+      resultYes =
+          resultYes * (element == 0 ? (1 / 4) / (totalYes + 1) : element);
+    });
+    noProbability.forEach((element) {
+      resultNo = resultNo * (element == 0 ? (1 / 4) / (totalNo + 1) : element);
+    });
+//    print('thing resultYes ${resultYes}');
+//    print('thing resultNo ${resultNo}');
+//    print('thing decision${resultYes > resultNo}');
+    if (resultYes > resultNo)
+      return 'yes';
+    else
+      return 'no';
   }
 }

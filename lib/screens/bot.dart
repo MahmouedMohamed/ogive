@@ -2,18 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dialogflow/flutter_dialogflow.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ogive/models/message.dart';
 import 'package:ogive/session_manager.dart';
 
 class Bot extends StatefulWidget {
   @override
   _BotState createState() => _BotState();
-}
-
-class Message {
-  String body;
-  String sender;
-  DateTime dateTime;
-  Message(this.body, this.sender, this.dateTime);
 }
 
 class _BotState extends State<Bot> with SingleTickerProviderStateMixin {
@@ -22,12 +16,12 @@ class _BotState extends State<Bot> with SingleTickerProviderStateMixin {
   SessionManager sessionManager = new SessionManager();
   sendMessage(message) async {
     //ToDo change your token to client token
-    Dialogflow dialogflow =
+    Dialogflow dialogFlow =
         Dialogflow(token: "58c27b19f95d41b0886c176cb610c38d");
     if (message.toString().contains(' ')) {
       message = message.toString().replaceAll(' ', '_');
     }
-    AIResponse response = await dialogflow.sendQuery(message.toString());
+    AIResponse response = await dialogFlow.sendQuery(message.toString());
     setState(() {
       messages.add(new Message(response.getMessageResponse(), 'Helpo',
           DateTime.parse(response.getTimestamp)));

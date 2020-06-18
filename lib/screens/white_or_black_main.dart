@@ -55,7 +55,7 @@ class _WhiteOrBlackState extends State<WhiteOrBlack> {
         userLocation.getLatLng().latitude, userLocation.getLatLng().longitude);
     Model model = new Model();
     return {
-      'model': model.test(weather.getCondition.toString().toLowerCase(),
+      'model': await model.test(weather.getCondition.toString().toLowerCase(),
           weather.getTemperature, weather.getHumidity, weather.getWindSpeed)=='yes'? 'You can wear White!' : 'You can wear Black!' ,
       'weather': weather
     };

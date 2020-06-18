@@ -11,19 +11,19 @@ class MarkerCreation extends StatefulWidget {
 }
 
 class _MarkerCreationState extends State<MarkerCreation> {
-  TextEditingController _name = new TextEditingController();
-  TextEditingController _description = new TextEditingController();
+  TextEditingController name = new TextEditingController();
+  TextEditingController description = new TextEditingController();
   NumberPicker integerNumberPicker;
-  List<DropdownMenuItem<int>> _dropDownMenuItems;
-  int _quantity = 1;
-  int _priority = 1;
+  List<DropdownMenuItem<int>> dropDownMenuItems;
+  int quantity = 1;
+  int priority = 1;
   List<int> priorities;
   @override
   void initState() {
     super.initState();
     priorities = [1, 3, 5, 7, 10];
-    _dropDownMenuItems = buildDropDownMenuItems(priorities);
-    _initializeNumberPickers();
+    dropDownMenuItems = buildDropDownMenuItems(priorities);
+    initializeNumberPickers();
   }
 
   @override
@@ -50,7 +50,7 @@ class _MarkerCreationState extends State<MarkerCreation> {
             height: 20,
           ),
           TextField(
-            controller: _name,
+            controller: name,
             decoration: InputDecoration(
               labelText: 'name',
             ),
@@ -59,7 +59,7 @@ class _MarkerCreationState extends State<MarkerCreation> {
             height: 20,
           ),
           TextField(
-            controller: _description,
+            controller: description,
             decoration: InputDecoration(
               labelText: 'describe it',
             ),
@@ -67,12 +67,12 @@ class _MarkerCreationState extends State<MarkerCreation> {
           SizedBox(
             height: 20,
           ),
-          Text('Quantity: $_quantity'),
+          Text('Quantity: $quantity'),
           SizedBox(
             height: 10,
           ),
           RaisedButton.icon(
-              onPressed: _showIntDialog,
+              onPressed: showIntDialog,
               icon: Icon(Icons.touch_app),
               label: Text('Change Quantity')),
           SizedBox(
@@ -83,8 +83,8 @@ class _MarkerCreationState extends State<MarkerCreation> {
             children: [
               Text('Priority: '),
               DropdownButton(
-                value: _priority,
-                items: _dropDownMenuItems,
+                value: priority,
+                items: dropDownMenuItems,
                 onChanged: onChangedDropdownItem,
                 icon: Icon(Icons.arrow_drop_down),
                 hint: Text('Select Priority'),
@@ -105,11 +105,11 @@ class _MarkerCreationState extends State<MarkerCreation> {
                   sessionManager.oauthToken,
                   userLocation.getLatLng().latitude,
                   userLocation.getLatLng().longitude,
-                  sessionManager.getUser().getID(),
-                  _name.value.text,
-                  _description.value.text,
-                  _quantity,
-                  _priority);
+                  sessionManager.getUser().getId(),
+                  name.value.text,
+                  description.value.text,
+                  quantity,
+                  priority);
               if (map.values.elementAt(0) == 'done') {
                 Toast.show('Thank You!', context,duration: 7);
                 Navigator.pop(context);
@@ -123,17 +123,17 @@ class _MarkerCreationState extends State<MarkerCreation> {
     ));
   }
 
-  void _initializeNumberPickers() {
+  void initializeNumberPickers() {
     integerNumberPicker = new NumberPicker.horizontal(
-      initialValue: _quantity,
+      initialValue: quantity,
       minValue: 1,
       maxValue: 10,
       step: 1,
-      onChanged: (value) => setState(() => _quantity = value),
+      onChanged: (value) => setState(() => quantity = value),
     );
   }
 
-  Future _showIntDialog() async {
+  Future showIntDialog() async {
     await showDialog<int>(
       context: context,
       builder: (BuildContext context) {
@@ -143,15 +143,14 @@ class _MarkerCreationState extends State<MarkerCreation> {
                 minValue: 1,
                 maxValue: 10,
                 step: 1,
-                initialIntegerValue: _quantity,
+                initialIntegerValue: quantity,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                 )));
       },
     ).then((num value) {
       if (value != null) {
-        print('Modifying Number $value');
-        setState(() => _quantity = value);
+        setState(() => quantity = value);
       }
     });
   }
@@ -171,7 +170,7 @@ class _MarkerCreationState extends State<MarkerCreation> {
 
   void onChangedDropdownItem(value) {
     setState(() {
-      _priority = value;
+      priority = value;
     });
   }
 }
