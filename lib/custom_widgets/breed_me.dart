@@ -37,19 +37,7 @@ Widget BreedMeWidget(BuildContext context, double opacity) {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(
-                      top: 10, bottom: 20),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Image.asset(
-                      'assets/images/ogive_version_2.png',
-                      height: MediaQuery.of(context).size.height/6,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 20),
+                  padding: EdgeInsets.only(top:MediaQuery.of(context).size.height/10, bottom: 20),
                   child: Align(
                     alignment: Alignment.center,
                     child: RichText(

@@ -49,7 +49,7 @@ Future<Map<String, dynamic>> register(
   }
 }
 
-Future<Map<String, dynamic>> createMarker(
+Future<Map<String, dynamic>> createMarker(oauthToken,
     latitude, longitude, userId, name, description, quantity, priority) async {
   var body = {
     'Latitude': latitude.toString(),
@@ -60,8 +60,8 @@ Future<Map<String, dynamic>> createMarker(
     'quantity': quantity.toString(),
     'priority': priority.toString(),
   };
-  var response = await http.post(Uri.encodeFull(URL + 'Marker'),
-      headers: {"Accpet": "application/json"}, body: body);
+  var response = await http.post(Uri.encodeFull(URL + 'marker'),
+      headers: {"Accpet": "application/json","Authorization": "Bearer "+oauthToken}, body: body);
   print('thing ${response.body}');
   var convertDataToJson = jsonDecode(response.body);
   if (response.statusCode != 200) {
@@ -78,7 +78,7 @@ Future<Map<String, dynamic>> createMarker(
   }
 }
 
-Future<String> createMemory(
+Future<String> createMemory(oauthToken,
     userId, personName, birthDate, deathDate, lifeStory, image) async {
   String fileName = image.path.split('/').last;
   FormData formData = new FormData.fromMap(({
@@ -89,7 +89,9 @@ Future<String> createMemory(
     'life_story': lifeStory.toString(),
     "image": await MultipartFile.fromFile(image.path, filename: fileName),
   }));
-  var response = await Dio().post(URL + 'Memory', data: formData);
+  var response = await Dio().post(URL + 'memory', data: formData,options: Options(
+    headers: {"Authorization": "Bearer "+oauthToken}
+  ));
   print('thing ${response}');
   var convertDataToJson = jsonDecode(response.toString());
   if (convertDataToJson['status'] != 'undone') {
@@ -98,14 +100,14 @@ Future<String> createMemory(
     return 'undone';
   }
 }
-Future<String> likeUnlikeMemory(
+Future<String> likeUnlikeMemory(oauthToken,
     memoryId, userId) async {
   var body = {
     'user_id': userId,
     'memory_id': memoryId,
   };
-  var response = await http.post(Uri.encodeFull(URL + 'Like'),
-      headers: {"Accpet": "application/json"}, body: body);
+  var response = await http.post(Uri.encodeFull(URL + 'like'),
+      headers: {"Accpet": "application/json","Authorization": "Bearer "+oauthToken}, body: body);
   print('thing ${response.body}');
   var convertDataToJson = jsonDecode(response.body);
   print('thing ${response}');

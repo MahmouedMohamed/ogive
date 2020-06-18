@@ -110,7 +110,7 @@ class _WhiteOrBlackState extends State<WhiteOrBlack> {
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         '23', 'OGIVE', 'OGIVE Program',
         importance: Importance.Max, priority: Priority.High, ticker: 'OGIVE',
-        color: Colors.white,
+//        icon: 'ogive_version_2',
         vibrationPattern: vibrationPattern);
     var iOSPlatformChannelSpecifics =
     new IOSNotificationDetails();
@@ -118,8 +118,8 @@ class _WhiteOrBlackState extends State<WhiteOrBlack> {
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
         TimeOfDay.now().minute,
-        'scheduled title',
-        'scheduled body',
+        'White Or Black',
+        'tell us which type of clothes would suited today\'s weather?',
         scheduledNotificationDateTime,
         platformChannelSpecifics,
         androidAllowWhileIdle: true,

@@ -26,13 +26,13 @@ class _MemoryWallState extends State<MemoryWall> {
   }
 
   getAllMemories() async {
-    memories = await getMemories();
+    memories = await getMemories(sessionManager.oauthToken);
   }
 
   Stream<List<Memory>> refresher(Duration interval) async* {
     while (true) {
       await Future.delayed(interval);
-      memories = await getMemories();
+      memories = await getMemories(sessionManager.oauthToken);
       yield memories;
     }
   }
@@ -97,7 +97,7 @@ class _MemoryWallState extends State<MemoryWall> {
                                         print(
                                             'thing update ${chosen.elementAt(1)}');
                                       } else {
-                                        deleteMemory(chosen.elementAt(1));
+                                        deleteMemory(sessionManager.oauthToken,chosen.elementAt(1));
                                         setState(() {});
                                         print(
                                             'thing delete ${chosen.elementAt(1)}');
@@ -183,7 +183,7 @@ class _MemoryWallState extends State<MemoryWall> {
                                     onPressed: () {
                                       setState(() {
                                         Toast.show('Refreshing', context);
-                                        likeUnlikeMemory(memories[index].id,
+                                        likeUnlikeMemory(sessionManager.oauthToken,memories[index].id,
                                             sessionManager.getUser().ID);
                                       });
                                     },

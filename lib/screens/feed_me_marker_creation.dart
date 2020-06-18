@@ -102,6 +102,7 @@ class _MarkerCreationState extends State<MarkerCreation> {
               if (userLocation.getLatLng() == null)
                 await userLocation.getUserLocation();
               Map<String, dynamic> map = await createMarker(
+                  sessionManager.oauthToken,
                   userLocation.getLatLng().latitude,
                   userLocation.getLatLng().longitude,
                   sessionManager.getUser().getID(),
