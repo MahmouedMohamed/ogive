@@ -1,138 +1,49 @@
-//import 'dart:async';
-//import 'dart:io';
-//import 'dart:math' as math;
-//import 'package:firebase_database/firebase_database.dart';
-//import 'package:flutter/material.dart';
-//import 'package:flutter/services.dart' show rootBundle;
-//import 'package:stats/stats.dart';
-//
-//import 'api_callers/get.dart';
-//import 'ml_models/weather_model.dart';
-//import 'models/user_location.dart';
-//import 'models/weather.dart';
-//
-//void main() {
-//  runApp(MyApp());
-//}
-//
-//class MyApp extends StatelessWidget {
-//  // This widget is the root of your application.
-//  @override
-//  Widget build(BuildContext context) {
-//    return MaterialApp(
-//      title: 'Flutter Demo',
-//      theme: ThemeData(
-//        primarySwatch: Colors.blue,
-//      ),
-//      debugShowCheckedModeBanner: false,
-//      home: HomePage(),
-//      routes: <String, WidgetBuilder>{
-////        "FeedMeIntro": (BuildContext context) => FeedMeIntro(),
-////        "FeedMe": (BuildContext context) => FeedMe(),
-//        //add more routes here
-//      },
-//    );
-//  }
-//}
-//
-//class HomePage extends StatefulWidget {
-//  @override
-//  _HomePageState createState() => _HomePageState();
-//}
-//
-//class _HomePageState extends State<HomePage> {
-//  final fb = FirebaseDatabase.instance;
-//  final myController = TextEditingController();
-//  final name = "Markers";
-//
-//  @override
-//  void initState() {
-//    // TODO: implement initState
-//    super.initState();
-//  }
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    final ref = fb.reference();
-//    List<dynamic> retrieved= new List<dynamic>();
-//
-//    return Scaffold(
-//        appBar: AppBar(
-//          title: Text(''),
-//        ),
-//        body: Container(
-//            child: Column(
-//          children: <Widget>[
-//            Row(
-//              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//              children: <Widget>[
-//                Text(name),
-//                Flexible(child: TextField(controller: myController)),
-//              ],
-//            ),
-//            RaisedButton(
-//              onPressed: () {
-//                ref.child(name).set(myController.text);
-//              },
-//              child: Text("Submit"),
-//            ),
-//            RaisedButton(
-//              onPressed: () async {
-//                List<dynamic> needs=new List<dynamic>();
-//                await ref.child("Markers").once().then((value) {
-//                  Map<dynamic,dynamic> map = value.value;
-//                  print(map.keys);
-//                  print(value.value['3']);
-//                  for(int i=0;i<map.keys.length;i++){
-////                    markers.add(Marker(
-////                      markerId:
-//                      print(map.keys.toList().elementAt(i));
-////                      position: LatLng(
-//                          print(map.values.toList().elementAt(i)['Latitude']);
-////                  ,
-//                    print(map.values.toList().elementAt(i)['Longitude']);
-////                  ),
-////                      icon: markerOption.getIcon(),
-////                      infoWindow:
-////                      InfoWindow(title: markerId.toString(), snippet: markerId.toString()),
-////                    ));
-//                    print(map.values.toList());
-////                    value.value[i]['Latitude'] == null? 0 : needs.add(value.value[i]['Latitude']);
-//                  }
-//                });
-//                print(needs);
-////                markers.add(Marker(
-////                  markerId: markerId,
-////                  position: LatLng(latitude, longitude),
-////                  icon: markerOption.getIcon(),
-////                  infoWindow:
-////                  InfoWindow(title: markerId.toString(), snippet: markerId.toString()),
-////                ));
-////                thing.then((value) => needs.add(value));
-////                values.forEach((key, values) {
-////                  needs.add(values);
-////                });
-////                print(needs);
-////                    .once().then((DataSnapshot data) {
-////                  print(data.toString().split(',').elementAt(0));
-////                  print(data.value);
-////                  print(data.key);
-//                setState(() {
-////                    retrieved.add(data.value);
-//                });
-////              },
-//              },
-//              child: Text("Get"),
-//            ),
-//            Text(retrieved.length == 0 ? '' : retrieved.elementAt(0).toString()),
-//          ],
-//        )));
-//  }
-//
-//  @override
-//  void dispose() {
-//    // Clean up the controller when the widget is disposed.
-//    myController.dispose();
-//    super.dispose();
-//  }
-//}
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'api_callers/get.dart';
+import 'models/user_location.dart';
+import 'screens/under_construction/color.dart';
+import 'screens/under_construction/jobs.dart';
+import 'screens/under_construction/news.dart';
+class Test extends StatefulWidget {
+  @override
+  _TestState createState() => _TestState();
+}
+
+class _TestState extends State<Test> {
+  String quote;
+  int _selectedIndex = 0;
+  final pageOption = [Color() , News(), Jobs()];
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(items: [
+        BottomNavigationBarItem(icon: Icon(Icons.color_lens),title: Text('')),
+        BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.newspaper),title: Text('News')),
+        BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.book),title: Text('Jobs')),
+      ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        unselectedItemColor: Colors.white,
+        onTap: _onItemTapped,
+        backgroundColor: Colors.black,
+      ),
+    body: pageOption[_selectedIndex],
+    );
+  }
+
+
+  aboutDialog(){
+    showAboutDialog(
+      context: context,
+      applicationVersion: '1.0.0',
+      applicationLegalese: 'Ogive',
+      applicationIcon: Image.asset('assets/images/ogive_version_2.png',fit: BoxFit.scaleDown,height: 40,width: 40,),
+    );
+  }
+}
