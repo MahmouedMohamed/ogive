@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:ogive/api_callers/get.dart';
 import 'package:toast/toast.dart';
 
-import '../session_manager.dart';
+import '../../session_manager.dart';
 
 class LoginScreen extends StatelessWidget {
-  static final TextEditingController _email = new TextEditingController();
-  static final TextEditingController _password = new TextEditingController();
-  String get email => _email.text;
-  String get password => _password.text;
-  BuildContext context;
-  Future<dynamic> onSubmit() async {
+  static final TextEditingController emailController = new TextEditingController();
+  static final TextEditingController passwordController = new TextEditingController();
+
+  String get email => emailController.text;
+  String get password => passwordController.text;
+  Future<dynamic> onSubmit(context) async {
     Map<String, dynamic> map = await getUser(email, password);
     if (map == null) {
       Toast.show('Email Or Password are inCorrect!', context);
@@ -25,7 +25,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    this.context = context;
     return GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
@@ -80,7 +79,7 @@ class LoginScreen extends StatelessWidget {
                           padding:
                               EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                           child: TextField(
-                            controller: _email,
+                            controller: emailController,
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
@@ -107,7 +106,7 @@ class LoginScreen extends StatelessWidget {
                           padding:
                               EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                           child: TextField(
-                            controller: _password,
+                            controller: passwordController,
                             obscureText: true,
                             textDirection: TextDirection.ltr,
                             textAlign: TextAlign.center,
@@ -142,11 +141,9 @@ class LoginScreen extends StatelessWidget {
                                 colorBrightness: Brightness.light,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
-                                onPressed: onSubmit,
-//                                onPressed: onSubmit() {
-//                                  Navigator.pop(context);
-//                                  Navigator.pushNamed(context, 'home');
-//                                },
+                                onPressed: () {
+                                  onSubmit(context);
+                                },
                               ),
                             ),
                             Padding(

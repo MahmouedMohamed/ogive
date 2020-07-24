@@ -11,10 +11,9 @@ import 'package:ogive/custom_widgets/text.dart';
 import 'package:ogive/ml_models/weather_model.dart';
 import 'package:ogive/models/user_location.dart';
 import 'package:ogive/models/weather.dart';
-import '../session_manager.dart';
-import 'homePage.dart';
+import '../../session_manager.dart';
+import '../homePage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:path_provider/path_provider.dart';
 class WhiteOrBlack extends StatefulWidget {
 
   @override

@@ -3,7 +3,7 @@ import 'package:ogive/api_callers/post.dart';
 import 'package:ogive/models/user_location.dart';
 import 'package:toast/toast.dart';
 import 'package:numberpicker/numberpicker.dart';
-import '../session_manager.dart';
+import '../../session_manager.dart';
 
 class MarkerCreation extends StatefulWidget {
   @override

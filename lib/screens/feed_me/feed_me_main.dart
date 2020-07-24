@@ -8,7 +8,7 @@ import 'package:ogive/models/user_location.dart';
 import 'package:toast/toast.dart';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart' as math;
-import '../session_manager.dart';
+import '../../session_manager.dart';
 
 class FeedMe extends StatefulWidget {
   @override

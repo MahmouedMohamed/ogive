@@ -6,8 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:math';
 
 import '../session_manager.dart';
-import 'homePage.dart';
-import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

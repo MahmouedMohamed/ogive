@@ -137,7 +137,7 @@ class _MemoryWallState extends State<MemoryWall> {
                                 icon: Icon(
                               Icons.keyboard_arrow_down,
                               color: Colors.white,
-                            )),
+                            ), onPressed: () {  },),
                             title: RichText(
                               text: TextSpan(
                                   text:

@@ -41,11 +41,11 @@ Future<Map<String, dynamic>> getUser(email, password) async {
     return null;
   } else {
     var convertDataToJson = jsonDecode(response.body);
-    Map<String, dynamic> map = {
+    return convertDataToJson['error']==null?
+    {
       "oauthToken": convertDataToJson['token'],
       "user": factory.getUserFromJson(convertDataToJson)
-    };
-    return map;
+    }: null;
   }
 }
 
