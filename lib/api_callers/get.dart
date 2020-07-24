@@ -2,53 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:ogive/custom_widgets/marker_icon.dart';
-import 'package:ogive/models/like.dart';
+import 'package:ogive/factoryCreator/ObjectFactory.dart';
 import 'package:ogive/models/memory.dart';
-import 'package:ogive/models/user.dart';
 import 'package:ogive/models/weather.dart';
 
-final String URL = 'http://192.168.1.100:8000/api/';
+final String URL = 'http://192.168.1.11:8000/api/';
+ObjectFactory factory = new ObjectFactory();
 
 Future<List<Marker>> getMarkers(String oauthToken) async {
-//  MarkerIcon markerOption = new MarkerIcon();      ///for custom marker icon
-  List<Marker> returnedMarkers = new List<Marker>();
   var response = await http.get(Uri.encodeFull(URL + 'markers'),
       headers: {"Accpet": "application/json","Authorization": "Bearer "+oauthToken});
   var convertDataToJson = jsonDecode(response.body);
-  List markers = convertDataToJson['markers'];
-  markers.forEach((marker) {
-    returnedMarkers.add(
-        Marker(
-      markerId: new MarkerId(marker['id'].toString()),
-      position: LatLng(
-          double.parse(marker['Latitude'].toString()),
-          double.parse(marker['Longitude'].toString())
-      ),
-//      icon: markerOption.getIcon(),
-      icon: getMarkerColor(marker['food']['priority']),
-      infoWindow: InfoWindow(
-          title: marker['food']['name'],
-          snippet: marker['food']['description'] +
-              ' \nQuantity = ${marker['food']['quantity']}'),
-    ));
-  });
-  return returnedMarkers;
-}
-
-getMarkerColor(priority) {
-  switch (priority) {
-    case 1:
-      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
-    case 3:
-      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
-    case 5:
-      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure);
-    case 7:
-      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
-    case 10:
-      return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
-  }
+  return factory.getMarkersFromJson(convertDataToJson);
 }
 
 Future<Weather> getWeatherCondition(latitude, longitude) async {
@@ -63,23 +28,9 @@ Future<Weather> getWeatherCondition(latitude, longitude) async {
     "Accpet": "application/json",
     "Content-Type": "application/json"
   };
-  Weather weather;
   var response = await http.get(Uri.encodeFull(weatherURL), headers: headers);
   var convertDataToJson = jsonDecode(response.body);
-  weather = new Weather(
-    convertDataToJson['name'].toString(),
-    latitude,
-    longitude,
-    convertDataToJson['weather'][0]['main'].toString().toLowerCase(),
-    convertDataToJson['weather'][0]['description'],
-    double.parse(convertDataToJson['main']['temp'].toString()) - 273.15,
-    double.parse(convertDataToJson['main']['temp_min'].toString()) - 273.15,
-    double.parse(convertDataToJson['main']['temp_max'].toString()) - 273.15,
-    double.parse(convertDataToJson['main']['pressure'].toString()),
-    double.parse(convertDataToJson['main']['humidity'].toString()),
-    double.parse(convertDataToJson['wind']['speed'].toString()),
-  );
-  return weather;
+  return factory.getWeatherFromJson(convertDataToJson,latitude, longitude);
 }
 
 Future<Map<String, dynamic>> getUser(email, password) async {
@@ -90,55 +41,19 @@ Future<Map<String, dynamic>> getUser(email, password) async {
     return null;
   } else {
     var convertDataToJson = jsonDecode(response.body);
-    User user = new User(
-      convertDataToJson['user']['id'].toString(),
-      convertDataToJson['user']['name'],
-      convertDataToJson['user']['user_name'],
-      convertDataToJson['user']['email'],
-      convertDataToJson['user']['email_verified_at'] == null
-          ? null
-          : DateTime.parse(convertDataToJson['user']['email_verified_at']),
-      DateTime.parse(convertDataToJson['user']['created_at']),
-      DateTime.parse(convertDataToJson['user']['updated_at']),
-    );
     Map<String, dynamic> map = {
       "oauthToken": convertDataToJson['token'],
-      "user": user
+      "user": factory.getUserFromJson(convertDataToJson)
     };
     return map;
   }
 }
 
 Future<List<Memory>> getMemories(String oauthToken) async {
-  List returnedMemories = new List<Memory>();
   var response = await http.get(Uri.encodeFull(URL + 'memories'),
       headers: {"Accpet": "application/json","Authorization": "Bearer "+oauthToken});
   var convertDataToJson = jsonDecode(response.body);
-  List memories = convertDataToJson['memories'];
-  memories.forEach((memory) {
-    List returnedLikes = new List<Like>();
-    if(memory['likes']!=null){
-      List likes = memory['likes'];
-      likes.forEach((like) {
-        returnedLikes.add(new Like(
-          like['memory_id'].toString(),
-          like['user_id'].toString(),
-        ));
-      });
-    }
-    returnedMemories.add(
-      new Memory(
-          memory['id'].toString(),
-          memory['user_id'].toString(),
-          memory['person_name'].toString(),
-          DateTime.parse(memory['birth']),
-          DateTime.parse(memory['death']),
-          memory['life_story'].toString(),
-          memory['image'].toString(),
-          returnedLikes),
-    );
-  });
-  return returnedMemories;
+  return factory.getMemoriesFromJson(convertDataToJson);
 }
 
 Future<Map<String,dynamic>> getJob() async {
