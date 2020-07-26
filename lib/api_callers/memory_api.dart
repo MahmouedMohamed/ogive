@@ -6,6 +6,9 @@ import 'package:http/http.dart' as http;
 class MemoryApi implements ApiCaller {
   @override
   dynamic create({oAuthToken, userData, markerData, memoryData}) async {
+    if(memoryData['image'] == null){
+      return 'undone';
+    }
     String fileName = memoryData['image'].path.split('/').last;
     FormData formData = new FormData.fromMap(({
       'user_id': memoryData['userId'].toString(),
