@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'api_callers/get.dart';
 import 'models/user_location.dart';
 import 'screens/under_construction/color.dart';
 import 'screens/under_construction/jobs.dart';

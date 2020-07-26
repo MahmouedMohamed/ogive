@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:ogive/api_callers/get.dart';
+import 'package:ogive/api_callers/api_caller.dart';
+import 'package:ogive/api_callers/user_api.dart';
 import 'package:toast/toast.dart';
-
 import '../../session_manager.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,10 +14,14 @@ class _LoginScreenState extends State<LoginScreen> {
       new TextEditingController();
   static final TextEditingController passwordController =
       new TextEditingController();
+  ApiCaller apiCaller = new UserApi();
+
   String get email => emailController.text;
   String get password => passwordController.text;
+
   Future<dynamic> onSubmit(context) async {
-    Map<String, dynamic> map = await getUser(email, password);
+    Map<String, dynamic> map =
+        await apiCaller.get(userData: {'email': email, 'password': password});
     if (map == null) {
       Toast.show('Email Or Password are inCorrect!', context);
     } else {
@@ -43,17 +44,14 @@ class _LoginScreenState extends State<LoginScreen> {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage('assets/images/sky.jpg'),
-                    fit: BoxFit.cover)
-//            )
-                ),
+                    fit: BoxFit.cover)),
             width: double.infinity,
             child: Column(
               children: <Widget>[
                 Padding(
                     padding: EdgeInsets.only(
                         top: MediaQuery.of(context).size.height / 10,
-                      bottom: MediaQuery.of(context).size.height / 10
-                    ),
+                        bottom: MediaQuery.of(context).size.height / 10),
                     child: Container(
                       height: MediaQuery.of(context).size.height / 6,
                       width: MediaQuery.of(context).size.height / 6,
@@ -114,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           )),
                       Padding(
                           padding:
-                              EdgeInsets.only(top: 20,right: 20,left: 20),
+                              EdgeInsets.only(top: 20, right: 20, left: 20),
                           child: TextField(
                             controller: passwordController,
                             obscureText: true,

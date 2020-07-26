@@ -1,11 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ogive/api_callers/delete.dart';
-import 'package:ogive/api_callers/get.dart';
-import 'package:ogive/api_callers/post.dart';
+import 'package:ogive/api_callers/api_caller.dart';
+import 'package:ogive/api_callers/like_api.dart';
+import 'package:ogive/api_callers/memory_api.dart';
 import 'package:ogive/models/memory.dart';
 import 'package:ogive/session_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,6 +18,8 @@ class MemoryWall extends StatefulWidget {
 class _MemoryWallState extends State<MemoryWall> {
   SessionManager sessionManager = new SessionManager();
   List<Memory> memories;
+  ApiCaller memoryApiCaller = new MemoryApi();
+  ApiCaller likeApiCaller = new LikeApi();
   @override
   void initState() {
     super.initState();
@@ -26,13 +27,14 @@ class _MemoryWallState extends State<MemoryWall> {
   }
 
   getAllMemories() async {
-    memories = await getMemories(sessionManager.oauthToken);
+    memories = await memoryApiCaller.get(oAuthToken: sessionManager.oauthToken);
   }
 
   Stream<List<Memory>> refresher(Duration interval) async* {
     while (true) {
       await Future.delayed(interval);
-      memories = await getMemories(sessionManager.oauthToken);
+      memories =
+          await memoryApiCaller.get(oAuthToken: sessionManager.oauthToken);
       yield memories;
     }
   }
@@ -89,15 +91,19 @@ class _MemoryWallState extends State<MemoryWall> {
                                       color: Colors.white,
                                     ),
                                     color: Colors.white,
-                                    onSelected: (value) {
-//                                  print('thing $value');
+                                    onSelected: (value) async {
                                       List<String> chosen =
                                           value.toString().split(" ");
                                       if (chosen.elementAt(0) == 'update') {
                                         print(
                                             'thing update ${chosen.elementAt(1)}');
                                       } else {
-                                        deleteMemory(sessionManager.oauthToken,chosen.elementAt(1));
+                                        await memoryApiCaller.delete(
+                                            oAuthToken:
+                                                sessionManager.oauthToken,
+                                            memoryData: {
+                                              'memoryId': chosen.elementAt(1)
+                                            });
                                         setState(() {});
                                         print(
                                             'thing delete ${chosen.elementAt(1)}');
@@ -109,13 +115,11 @@ class _MemoryWallState extends State<MemoryWall> {
                                           ? [
                                               PopupMenuItem(
                                                   value:
-//                                                  updateMemory(memories[index].id),
                                                       'update ${memories[index].id}',
                                                   child: Text('Update')),
                                               PopupMenuItem(
                                                   value:
                                                       'delete ${memories[index].id}',
-//                                                  'delete ${memories[index].id}',
                                                   child: Text('Delete'))
                                             ]
                                           : [
@@ -134,10 +138,12 @@ class _MemoryWallState extends State<MemoryWall> {
                           ),
                           ExpansionTile(
                             trailing: IconButton(
-                                icon: Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Colors.white,
-                            ), onPressed: () {  },),
+                              icon: Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {},
+                            ),
                             title: RichText(
                               text: TextSpan(
                                   text:
@@ -183,8 +189,16 @@ class _MemoryWallState extends State<MemoryWall> {
                                     onPressed: () {
                                       setState(() {
                                         Toast.show('Refreshing', context);
-                                        likeUnlikeMemory(sessionManager.oauthToken,memories[index].id,
-                                            sessionManager.getUser().id);
+                                        likeApiCaller.update(
+                                            oAuthToken:
+                                                sessionManager.oauthToken,
+                                            memoryData: {
+                                              'memoryId': memories[index].id
+                                            },
+                                            userData: {
+                                              'userId':
+                                                  sessionManager.getUser().id
+                                            });
                                       });
                                     },
                                   ),

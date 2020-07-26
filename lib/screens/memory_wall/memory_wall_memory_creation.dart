@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:image_picker/image_picker.dart';
-import 'package:ogive/api_callers/post.dart';
+import 'package:ogive/api_callers/api_caller.dart';
+import 'package:ogive/api_callers/memory_api.dart';
 import 'package:toast/toast.dart';
-
 import '../../session_manager.dart';
 
 class MemoryCreation extends StatefulWidget {
@@ -22,6 +20,7 @@ class _MemoryCreationState extends State<MemoryCreation> {
   DateTime deathDate = DateTime.now();
   File image;
   String _path;
+  ApiCaller memoryApiCaller = new MemoryApi();
   Future<File> pickImageFromGallery(ImageSource source) {
     return ImagePicker.pickImage(source: source);
   }
@@ -33,17 +32,20 @@ class _MemoryCreationState extends State<MemoryCreation> {
       _path = image.path;
     });
   }
-
-  _onPressed() async {
-    if (await createMemory(
-            sessionManager.oauthToken,
-            sessionManager.getUser().id,
-            personName.text,
-            birthDate,
-            deathDate,
-            lifeStory.text,
-            image) ==
-        'done') {
+  Future<String> getCreationStatus() async {
+    return await memoryApiCaller
+        .create(oAuthToken: sessionManager.oauthToken, memoryData: {
+    'userId': sessionManager.getUser().id,
+    'personName': personName.text,
+    'birthDate': birthDate,
+    'deathDate': deathDate,
+    'lifeStory': lifeStory.text,
+    'image': image,
+    });
+  }
+  saveMemory() async {
+    String status = await getCreationStatus();
+    if ('done' == status) {
       Toast.show('Memory will always remain!', context);
       Navigator.popAndPushNamed(context, "MemoryWall");
     } else {
@@ -211,7 +213,7 @@ class _MemoryCreationState extends State<MemoryCreation> {
                       Align(
                         alignment: Alignment.bottomRight,
                         child: RaisedButton(
-                          onPressed: _onPressed,
+                          onPressed: saveMemory,
                           child: Text('Submit Memory',
                               style: GoogleFonts.arimo(
                                   fontSize: 16,

@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:ogive/api_callers/delete.dart';
-import 'package:ogive/api_callers/get.dart';
+import 'package:ogive/api_callers/api_caller.dart';
+import 'package:ogive/api_callers/marker_api.dart';
 import 'package:ogive/models/user_location.dart';
 import 'package:toast/toast.dart';
 import 'dart:math';
@@ -22,6 +22,7 @@ class _FeedMeState extends State<FeedMe> {
   bool following = false;
   Marker chosenMarker;
   SessionManager sessionManager = new SessionManager();
+  ApiCaller markerApiCaller = new MarkerApi();
   @override
   void initState() {
     super.initState();
@@ -78,9 +79,9 @@ class _FeedMeState extends State<FeedMe> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("${markers[index].infoWindow.title}"),
-      content: Text('${(calculateDistance(userLocation.getLatLng(), markers[index].position) * 1000).toStringAsFixed(2)} meter to get it'
-        +'\n${markers[index].infoWindow.snippet}'
-        ,
+      content: Text(
+        '${(calculateDistance(userLocation.getLatLng(), markers[index].position) * 1000).toStringAsFixed(2)} meter to get it' +
+            '\n${markers[index].infoWindow.snippet}',
       ),
       actions: [
         launchButton,
@@ -102,7 +103,9 @@ class _FeedMeState extends State<FeedMe> {
       await userLocation.getUserLocation();
     }
 
-    following ? 1 : markers = await getMarkers(sessionManager.oauthToken);
+    following
+        ? 1
+        : markers = await markerApiCaller.get(oAuthToken: sessionManager.oauthToken);
     for (int i = 0; i < markers.length; i++) {
       markers[i] = markers.elementAt(i).copyWith(onTapParam: () {
         onMarkerTapped(markers.elementAt(i).markerId);
@@ -199,7 +202,9 @@ class _FeedMeState extends State<FeedMe> {
                 Toast.show(
                     'Thank You for making the world a better place!', context,
                     duration: 7, backgroundColor: Colors.green);
-                await deleteMarker(sessionManager.oauthToken,markers[0].markerId.value);
+                await markerApiCaller.delete(
+                    oAuthToken: sessionManager.oauthToken,
+                    markerData: {'markerId': markers[0].markerId.value});
                 following = !following;
                 Navigator.popAndPushNamed(context, 'FeedMe');
               });
@@ -216,7 +221,9 @@ class _FeedMeState extends State<FeedMe> {
                   context,
                   duration: 7,
                   backgroundColor: Colors.green);
-              await deleteMarker(sessionManager.oauthToken,markers[0].markerId.value);
+              await markerApiCaller.delete(
+                  oAuthToken: sessionManager.oauthToken,
+                  markerData: {'markerId': markers[0].markerId.value});
               following = !following;
               Navigator.popAndPushNamed(context, 'FeedMe');
             });

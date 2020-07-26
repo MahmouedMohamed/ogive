@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ogive/api_callers/post.dart';
+import 'package:ogive/api_callers/api_caller.dart';
+import 'package:ogive/api_callers/marker_api.dart';
 import 'package:ogive/models/user_location.dart';
 import 'package:toast/toast.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -18,6 +19,7 @@ class _MarkerCreationState extends State<MarkerCreation> {
   int quantity = 1;
   int priority = 1;
   List<int> priorities;
+  ApiCaller markerApiCaller = new MarkerApi();
   @override
   void initState() {
     super.initState();
@@ -101,17 +103,17 @@ class _MarkerCreationState extends State<MarkerCreation> {
               SessionManager sessionManager = new SessionManager();
               if (userLocation.getLatLng() == null)
                 await userLocation.getUserLocation();
-              Map<String, dynamic> map = await createMarker(
-                  sessionManager.oauthToken,
-                  userLocation.getLatLng().latitude,
-                  userLocation.getLatLng().longitude,
-                  sessionManager.getUser().getId(),
-                  name.value.text,
-                  description.value.text,
-                  quantity,
-                  priority);
+              Map<String, dynamic> map = await markerApiCaller
+                  .create(oAuthToken: sessionManager.oauthToken, markerData: {
+                'userLocation': userLocation.getLatLng(),
+                'userId': sessionManager.getUser().getId(),
+                'name': name.value.text,
+                'description': description.value.text,
+                'quantity': quantity,
+                'priority': priority
+              });
               if (map.values.elementAt(0) == 'done') {
-                Toast.show('Thank You!', context,duration: 7);
+                Toast.show('Thank You!', context, duration: 7);
                 Navigator.pop(context);
               } else {
                 Toast.show('Please fill all the required Data', context);

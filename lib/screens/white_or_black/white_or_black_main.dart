@@ -6,7 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ogive/api_callers/get.dart';
+import 'package:ogive/api_callers/api_caller.dart';
+import 'package:ogive/api_callers/weather_api.dart';
 import 'package:ogive/custom_widgets/text.dart';
 import 'package:ogive/ml_models/weather_model.dart';
 import 'package:ogive/models/user_location.dart';
@@ -50,8 +51,10 @@ class _WhiteOrBlackState extends State<WhiteOrBlack> {
     if (userLocation.getLatLng() == null) {
       await userLocation.getUserLocation();
     }
-    weather = await getWeatherCondition(
-        userLocation.getLatLng().latitude, userLocation.getLatLng().longitude);
+//    weather = await getWeatherCondition(
+//        userLocation.getLatLng().latitude, userLocation.getLatLng().longitude);
+    ApiCaller apiCaller = new WeatherApi();
+    weather = await apiCaller.get(userData: {'userLocation': userLocation.getLatLng()});
     Model model = new Model();
     return {
       'model': await model.test(weather.getCondition.toString().toLowerCase(),
