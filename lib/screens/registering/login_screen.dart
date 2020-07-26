@@ -1,13 +1,22 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ogive/api_callers/get.dart';
 import 'package:toast/toast.dart';
 
 import '../../session_manager.dart';
 
-class LoginScreen extends StatelessWidget {
-  static final TextEditingController emailController = new TextEditingController();
-  static final TextEditingController passwordController = new TextEditingController();
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
+  static final TextEditingController emailController =
+      new TextEditingController();
+  static final TextEditingController passwordController =
+      new TextEditingController();
   String get email => emailController.text;
   String get password => passwordController.text;
   Future<dynamic> onSubmit(context) async {
@@ -32,19 +41,22 @@ class LoginScreen extends StatelessWidget {
         child: Material(
           child: Container(
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-              colors: [Colors.white, Colors.lightBlueAccent, Colors.blue],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            )),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/sky.jpg'),
+                    fit: BoxFit.cover)
+//            )
+                ),
             width: double.infinity,
             child: Column(
               children: <Widget>[
                 Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 10,
+                      bottom: MediaQuery.of(context).size.height / 10
+                    ),
                     child: Container(
-                      height: 200,
-                      width: 200,
+                      height: MediaQuery.of(context).size.height / 6,
+                      width: MediaQuery.of(context).size.height / 6,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image:
@@ -52,27 +64,28 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 0.0, bottom: 40),
-                      child: Text(
-                        'OGIVE',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white30,
-                          shadows: [
-                            Shadow(color: Colors.black, offset: Offset(0, 2))
-                          ],
-                          fontSize: 30,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+//                AnimatedDefaultTextStyle(
+//                  child: Text(
+//                    'OGIVE',
+//                  ),
+//                  style: GoogleFonts.sairaCondensed(
+//                    color: _color,
+//                    fontSize: 80,
+//                    fontWeight: FontWeight.w400,
+//                    letterSpacing: 2.0,
+//                  ),
+//                  duration: Duration(seconds: 1),
+//                  curve: ElasticInCurve(4),
+//                ),
                 Container(
-                  decoration: BoxDecoration(color: Colors.transparent),
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height / 1000,
+                      right: 10,
+                      left: 10),
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.3),
+                      borderRadius: BorderRadius.all(Radius.circular(30))),
                   child: Column(
                     children: [
                       Padding(
@@ -96,15 +109,12 @@ class LoginScreen extends StatelessWidget {
                                 Icons.person,
                                 color: Colors.pinkAccent,
                               ),
-                              labelText: 'User Name:',
+                              labelText: 'Email',
                             ),
                           )),
-                      SizedBox(
-                        height: 20,
-                      ),
                       Padding(
                           padding:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                              EdgeInsets.only(top: 20,right: 20,left: 20),
                           child: TextField(
                             controller: passwordController,
                             obscureText: true,
@@ -123,7 +133,7 @@ class LoginScreen extends StatelessWidget {
                                 Icons.lock,
                                 color: Colors.pinkAccent,
                               ),
-                              labelText: 'Password :',
+                              labelText: 'Password',
                             ),
                           )),
                       SizedBox(
