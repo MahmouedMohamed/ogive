@@ -54,11 +54,11 @@ class ObjectFactory {
     return returnedMarkers;
   }
 
-  Weather getWeatherFromJson(json, latitude, longitude) {
+  Weather getWeatherFromJson(json, userLocation) {
     return new Weather(
       json['name'].toString(),
-      latitude,
-      longitude,
+      userLocation.latitude,
+      userLocation.longitude,
       json['weather'][0]['main'].toString().toLowerCase(),
       json['weather'][0]['description'],
       double.parse(json['main']['temp'].toString()) - 273.15,
