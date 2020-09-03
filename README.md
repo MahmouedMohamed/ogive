@@ -20,14 +20,8 @@ Feedme is a non profit app that helps people to get their over needs food to any
 ### Achievement System 
   Coming Soon.
 #### All the APIs are supported by laravel backend that can be found here https://github.com/MahmouedMohamed/OgiveWeb
-## 2- White Or Black
-W|B is an entertainment app that helps user to know what he would wear today based on today's weather.
-### White|Black
-  The result of the program is done by naive bayes Machine Learning model, it also said by voice overlay for kind of interacting.
-### Feedback results
-  User can improve future results by commenting on today's result using push notification.
-### Weather app
-  White or Black can only acts as normal weather app ignoring the ML model result, as it provides all essential info to know today's weather using OpenWeatherAPI.
+## 2- White Or 
+  You can find more info here https://github.com/Ogive23/White_Black
 ## 3- Memory Wall
   Memory wall is the place where the people who left us memory would remains.
 ### Post Memory
