@@ -20,7 +20,7 @@ Feedme is a non profit app that helps people to get their over needs food to any
 ### Achievement System 
   Coming Soon.
 #### All the APIs are supported by laravel backend that can be found here https://github.com/MahmouedMohamed/OgiveWeb
-## 2- White Or 
+## 2- White Or Black
   You can find more info here https://github.com/Ogive23/White_Black
 ## 3- Memory Wall
   Memory wall is the place where the people who left us memory would remains.
