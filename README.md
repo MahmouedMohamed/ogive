@@ -1,25 +1,9 @@
 # ogive
 Ogive is a full program that contains multiple apps some of them maybe help to change the world, and the other just for entertainment purposes.
-## Main functionalities
-* Sign in
-* Sign up
-* Logout
-* Access Profile
-* Chat Bot that may answer any question about any app
-* Contact Society of the app (ex, facebook page, twitter, etc..)
-
-## 1- FeedMe
-Feedme is a non profit app that helps people to get their over needs food to anyone that maybe can't find any food to eat, it provides many functionalities:
-### Create Marker
- Users can add markers on the map that acts as a place contains over needed food.
- #### food
-  * Marker contains name, description, quantity and priority based on many given factors.
-  * Priority acts as the marker's color, the more red it become the more priority it's.
-### volunteer
- Any user can volunteer to get these markers to the people that they deserve.
-### Achievement System 
-  Coming Soon.
 #### All the APIs are supported by laravel backend that can be found here https://github.com/MahmouedMohamed/OgiveWeb
+
+## 1- Ataa
+  You can find more info here https://github.com/Ogive23/Ataa
 ## 2- White Or Black
   You can find more info here https://github.com/Ogive23/White_Black
 ## 3- Memory Wall
@@ -34,7 +18,7 @@ Feedme is a non profit app that helps people to get their over needs food to any
   User can show any memories posted by anyone who used the app.
 #### All the APIs are supported by laravel backend that can be found here https://github.com/MahmouedMohamed/OgiveWeb
 ## 4- BreedMe
- Coming soon.
+  You can find more info here https://github.com/Ogive23/BreedMe
 ## 5- Chat with me
  Coming soon.
 ## 6- Find me a job
