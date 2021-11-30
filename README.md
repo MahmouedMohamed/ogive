@@ -1,4 +1,4 @@
-# ogive ## :warning: Deprecated
+# ogive :warning: Deprecated
 Ogive is a full program that contains multiple apps some of them maybe help to change the world, and the other just for entertainment purposes.
 #### All the Applications moved to https://github.com/MahmouedMohamed/Ogive23
 #### All the APIs are supported by laravel backend that can be found here https://github.com/MahmouedMohamed/OgiveWeb
