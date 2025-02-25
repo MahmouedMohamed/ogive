@@ -28,6 +28,8 @@
 ## 9- Make me breathe
  Coming soon.
 ## 10- Paint for me
+
+<meta name="google-site-verification" content="wajhdwVyq0ZobV-CkX5slbv5F1sjcxzxKT6Y6A6lvYs" />
  Coming soon.
 ## 11- Pay for me
  Coming soon.
